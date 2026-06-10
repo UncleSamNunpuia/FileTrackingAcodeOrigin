@@ -1,0 +1,723 @@
+This is a complete dashboard HTML document for admin and superuser roles. It features two independent application cards: one for creating new users and another for entering file numbers and names, with data persistence and role-based views.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Admin Suite | User & File Manager Dashboard</title>
+    <!-- Google Fonts + Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            color: #0f172a;
+            line-height: 1.4;
+            padding: 2rem 1.5rem;
+        }
+
+        /* dashboard container */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* top header */
+        .top-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .brand h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e293b, #2d3a4b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .brand p {
+            font-size: 0.85rem;
+            color: #475569;
+            margin-top: 4px;
+        }
+
+        .role-panel {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .role-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 6px 16px;
+            border-radius: 40px;
+        }
+
+        .role-icon {
+            font-size: 1.1rem;
+        }
+
+        .role-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .role-switch {
+            display: flex;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 48px;
+        }
+
+        .role-option {
+            padding: 5px 14px;
+            border-radius: 32px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            background: transparent;
+            color: #334155;
+        }
+
+        .role-option.active {
+            background: #1e293b;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* grid for two separate apps */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        /* card style */
+        .app-card {
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+            border: 1px solid #eef2ff;
+        }
+
+        .app-card:hover {
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            padding: 1.4rem 1.8rem;
+            background: #fefefe;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header i {
+            font-size: 1.8rem;
+            color: #3b82f6;
+            background: #eff6ff;
+            padding: 10px;
+            border-radius: 18px;
+        }
+
+        .card-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .card-header p {
+            font-size: 0.75rem;
+            color: #5b6e8c;
+            margin-top: 4px;
+        }
+
+        .card-body {
+            padding: 1.6rem 1.8rem;
+        }
+
+        /* form groups */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 20px;
+            font-family: 'Inter', monospace;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            background: #ffffff;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+        }
+
+        .btn-primary {
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-primary:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* list section */
+        .recent-list {
+            margin-top: 1.8rem;
+            border-top: 1px solid #ecf3fa;
+            padding-top: 1.2rem;
+        }
+
+        .recent-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #5b6e8c;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .list-items {
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .list-item {
+            background: #fafcff;
+            border-radius: 20px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #eef2ff;
+            transition: 0.1s;
+        }
+
+        .list-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .list-item-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .list-item-sub {
+            font-size: 0.7rem;
+            color: #5b6e8c;
+        }
+
+        .delete-item {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 8px;
+            border-radius: 40px;
+            transition: 0.2s;
+        }
+
+        .delete-item:hover {
+            color: #ef4444;
+            background: #fee2e2;
+        }
+
+        .empty-message {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 24px 8px;
+            font-style: italic;
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.2s;
+            pointer-events: none;
+        }
+
+        .toast-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        hr {
+            margin: 6px 0;
+        }
+
+        @media (max-width: 850px) {
+            body {
+                padding: 1.2rem;
+            }
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+            .top-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6c757d;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1.8rem;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- header with role indication -->
+    <div class="top-header">
+        <div class="brand">
+            <h1><i class="fas fa-shield-alt" style="color:#3b82f6; margin-right: 6px;"></i>ControlCenter</h1>
+            <p>Secure management suite · Superuser & Admin dashboard</p>
+        </div>
+        <div class="role-panel">
+            <div class="role-badge">
+                <i class="fas fa-user-cog role-icon"></i>
+                <span class="role-name" id="activeRoleLabel">Superuser</span>
+            </div>
+            <div class="role-switch" id="roleSwitch">
+                <span class="role-option" data-role="admin">Admin</span>
+                <span class="role-option active" data-role="superuser">Superuser</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Two separate apps: Create new user & Enter File number & name -->
+    <div class="apps-grid">
+        <!-- APP 1: CREATE NEW USER -->
+        <div class="app-card">
+            <div class="card-header">
+                <i class="fas fa-user-plus"></i>
+                <div>
+                    <h2>Create new user</h2>
+                    <p>Add system users · roles & credentials</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <form id="createUserForm">
+                    <div class="form-group">
+                        <label><i class="far fa-user"></i> Full name *</label>
+                        <input type="text" id="userFullName" placeholder="e.g., Sarah Johnson" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="far fa-envelope"></i> Email address *</label>
+                        <input type="email" id="userEmail" placeholder="admin@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Role</label>
+                        <select id="userRole">
+                            <option value="Admin">Admin</option>
+                            <option value="Superuser" selected>Superuser</option>
+                            <option value="Viewer">Viewer</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Create user account</button>
+                </form>
+                <!-- recent users list (persisted) -->
+                <div class="recent-list">
+                    <div class="recent-title"><i class="fas fa-history"></i> Recently created users</div>
+                    <div id="userListContainer" class="list-items">
+                        <!-- dynamic user list -->
+                        <div class="empty-message">No users created yet. Fill the form above.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- APP 2: ENTER FILE NUMBER & NAME -->
+        <div class="app-card">
+            <div class="card-header">
+                <i class="fas fa-folder-open"></i>
+                <div>
+                    <h2>Enter File number & name</h2>
+                    <p>Register documents / digital records</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <form id="fileForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-hashtag"></i> File number *</label>
+                        <input type="text" id="fileNumber" placeholder="e.g., FN-2025-001, DOC/42" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-heading"></i> File name *</label>
+                        <input type="text" id="fileName" placeholder="e.g., Annual Report Q2, Contract Agreement" required>
+                    </div>
+                    <button type="submit" class="btn-primary"><i class="fas fa-plus-circle"></i> Register file</button>
+                </form>
+                <!-- recent files list (persisted) -->
+                <div class="recent-list">
+                    <div class="recent-title"><i class="fas fa-list-ul"></i> Registered files (shortcut list)</div>
+                    <div id="fileListContainer" class="list-items">
+                        <div class="empty-message">No files added. Register file number & name.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-lock"></i> Secure dashboard · Superuser & Admin privileged access · Real-time local storage
+    </footer>
+</div>
+
+<div id="toastMsg" class="toast-message">✔ Action completed</div>
+
+<script>
+    // ---------- STORAGE KEYS ----------
+    const STORAGE_USERS = 'dashboard_users_list';
+    const STORAGE_FILES = 'dashboard_files_list';
+
+    // ---------- GLOBAL STATE ----------
+    let users = [];      // each user: { id, fullName, email, role, createdAt }
+    let files = [];      // each file: { id, fileNumber, fileName, createdAt }
+
+    // role simulation (no functional restriction, but visual badge)
+    let currentRole = 'superuser';   // 'admin' or 'superuser'
+
+    // DOM elements
+    const createUserForm = document.getElementById('createUserForm');
+    const userFullName = document.getElementById('userFullName');
+    const userEmail = document.getElementById('userEmail');
+    const userRole = document.getElementById('userRole');
+    const userListContainer = document.getElementById('userListContainer');
+
+    const fileForm = document.getElementById('fileForm');
+    const fileNumberInput = document.getElementById('fileNumber');
+    const fileNameInput = document.getElementById('fileName');
+    const fileListContainer = document.getElementById('fileListContainer');
+
+    const activeRoleLabel = document.getElementById('activeRoleLabel');
+    const roleOptions = document.querySelectorAll('.role-option');
+    const toastMsgDiv = document.getElementById('toastMsg');
+
+    // Helper: show toast
+    function showToast(message, isError = false) {
+        toastMsgDiv.textContent = message || (isError ? '⚠️ Error' : '✅ Success');
+        toastMsgDiv.style.background = isError ? '#b91c1c' : '#0f172a';
+        toastMsgDiv.classList.add('show');
+        setTimeout(() => {
+            toastMsgDiv.classList.remove('show');
+        }, 2500);
+    }
+
+    // load data from localStorage
+    function loadDataFromStorage() {
+        const storedUsers = localStorage.getItem(STORAGE_USERS);
+        if (storedUsers) {
+            try {
+                users = JSON.parse(storedUsers);
+            } catch(e) { users = []; }
+        } else {
+            // seed with some demo users for better UX
+            users = [
+                { id: Date.now() + 1, fullName: "Alex Morgan", email: "alex.super@control.com", role: "Superuser", createdAt: new Date().toISOString() },
+                { id: Date.now() + 2, fullName: "Jamie Lin", email: "jamie.admin@control.com", role: "Admin", createdAt: new Date().toISOString() }
+            ];
+            saveUsersToStorage();
+        }
+
+        const storedFiles = localStorage.getItem(STORAGE_FILES);
+        if (storedFiles) {
+            try {
+                files = JSON.parse(storedFiles);
+            } catch(e) { files = []; }
+        } else {
+            // seed demo files
+            files = [
+                { id: Date.now() + 100, fileNumber: "FR-001", fileName: "Environmental Impact Assessment", createdAt: new Date().toISOString() },
+                { id: Date.now() + 101, fileNumber: "FN-2024-022", fileName: "Budget Proposal Q4", createdAt: new Date().toISOString() }
+            ];
+            saveFilesToStorage();
+        }
+    }
+
+    function saveUsersToStorage() {
+        localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+    }
+
+    function saveFilesToStorage() {
+        localStorage.setItem(STORAGE_FILES, JSON.stringify(files));
+    }
+
+    // Render user list (app 1)
+    function renderUserList() {
+        if (!userListContainer) return;
+        if (users.length === 0) {
+            userListContainer.innerHTML = '<div class="empty-message"><i class="far fa-frown"></i> No users yet. Use form to create.</div>';
+            return;
+        }
+        const html = users.map(user => `
+            <div class="list-item" data-user-id="${user.id}">
+                <div class="list-item-info">
+                    <span class="list-item-title"><i class="fas fa-user-circle"></i> ${escapeHtml(user.fullName)}</span>
+                    <span class="list-item-sub">${escapeHtml(user.email)} · ${escapeHtml(user.role)}</span>
+                </div>
+                <button class="delete-item" data-id="${user.id}" data-type="user" title="Delete user"><i class="fas fa-trash-alt"></i></button>
+            </div>
+        `).join('');
+        userListContainer.innerHTML = html;
+        // attach delete events for users
+        document.querySelectorAll('.delete-item[data-type="user"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.getAttribute('data-id'));
+                deleteUserById(id);
+            });
+        });
+    }
+
+    function deleteUserById(id) {
+        users = users.filter(u => u.id !== id);
+        saveUsersToStorage();
+        renderUserList();
+        showToast(`User removed successfully`, false);
+    }
+
+    function deleteFileById(id) {
+        files = files.filter(f => f.id !== id);
+        saveFilesToStorage();
+        renderFileList();
+        showToast(`File entry deleted`, false);
+    }
+
+    // Render file list (app 2)
+    function renderFileList() {
+        if (!fileListContainer) return;
+        if (files.length === 0) {
+            fileListContainer.innerHTML = '<div class="empty-message"><i class="far fa-folder-open"></i> No files registered. Add file number & name.</div>';
+            return;
+        }
+        const html = files.map(file => `
+            <div class="list-item" data-file-id="${file.id}">
+                <div class="list-item-info">
+                    <span class="list-item-title"><i class="fas fa-file-alt"></i> #${escapeHtml(file.fileNumber)}</span>
+                    <span class="list-item-sub">📄 ${escapeHtml(file.fileName)} · ${new Date(file.createdAt).toLocaleDateString()}</span>
+                </div>
+                <button class="delete-item" data-id="${file.id}" data-type="file" title="Delete file"><i class="fas fa-trash-alt"></i></button>
+            </div>
+        `).join('');
+        fileListContainer.innerHTML = html;
+        document.querySelectorAll('.delete-item[data-type="file"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.getAttribute('data-id'));
+                deleteFileById(id);
+            });
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // create new user
+    function handleCreateUser(e) {
+        e.preventDefault();
+        const fullName = userFullName.value.trim();
+        const email = userEmail.value.trim();
+        const role = userRole.value;
+
+        if (!fullName) {
+            showToast('Full name is required', true);
+            return;
+        }
+        if (!email || !email.includes('@')) {
+            showToast('Valid email address required', true);
+            return;
+        }
+
+        // duplicate check (simple optional)
+        const emailExists = users.some(u => u.email.toLowerCase() === email.toLowerCase());
+        if (emailExists) {
+            showToast(`User with email ${email} already exists.`, true);
+            return;
+        }
+
+        const newUser = {
+            id: Date.now(),
+            fullName: fullName,
+            email: email,
+            role: role,
+            createdAt: new Date().toISOString()
+        };
+        users.unshift(newUser);   // latest first
+        saveUsersToStorage();
+        renderUserList();
+        // reset form
+        createUserForm.reset();
+        userRole.value = "Superuser"; // default after reset set again (nice)
+        showToast(`✅ User "${fullName}" created successfully`, false);
+    }
+
+    // handle file registration (file number & name)
+    function handleCreateFile(e) {
+        e.preventDefault();
+        let fileNumber = fileNumberInput.value.trim();
+        let fileName = fileNameInput.value.trim();
+
+        if (!fileNumber) {
+            showToast('File number is required', true);
+            return;
+        }
+        if (!fileName) {
+            showToast('File name is required', true);
+            return;
+        }
+
+        // optional duplicate warning but not blocking
+        const newFile = {
+            id: Date.now(),
+            fileNumber: fileNumber,
+            fileName: fileName,
+            createdAt: new Date().toISOString()
+        };
+        files.unshift(newFile);
+        saveFilesToStorage();
+        renderFileList();
+        fileForm.reset();
+        showToast(`📁 File "${fileNumber}" registered`, false);
+    }
+
+    // Role switcher (admin / superuser) - only UI experience, both roles see same apps
+    // but we change the header badge and can show a subtle message.
+    function setActiveRole(role) {
+        currentRole = role;
+        if (role === 'superuser') {
+            activeRoleLabel.innerHTML = '<i class="fas fa-crown" style="margin-right:6px;"></i> Superuser';
+        } else {
+            activeRoleLabel.innerHTML = '<i class="fas fa-user-shield"></i> Admin';
+        }
+        // optional: we can add a small context message (no functional difference, just dashboard identity)
+        const roleMessage = role === 'superuser' ? 'Full system control • create users & manage files' : 'Administrator access • user & file management';
+        showToast(`Role switched to ${role === 'superuser' ? 'Superuser' : 'Admin'} — ${roleMessage}`, false);
+    }
+
+    function initRoleSwitcher() {
+        roleOptions.forEach(opt => {
+            opt.addEventListener('click', () => {
+                const selectedRole = opt.getAttribute('data-role');
+                if (selectedRole === currentRole) return;
+                // update active class
+                roleOptions.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                setActiveRole(selectedRole);
+            });
+        });
+        // initial default superuser
+        setActiveRole('superuser');
+    }
+
+    // initial load data & render
+    function init() {
+        loadDataFromStorage();
+        renderUserList();
+        renderFileList();
+        initRoleSwitcher();
+
+        // attach form listeners
+        createUserForm.addEventListener('submit', handleCreateUser);
+        fileForm.addEventListener('submit', handleCreateFile);
+
+        // additional demo context: any action shows role but both apps fully accessible
+        console.log('Dashboard ready — superuser & admin unified workspace');
+    }
+
+    init();
+</script>
+</body>
+</html>
