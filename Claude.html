@@ -1,0 +1,30 @@
+Now let me design this. This is a government/records management form (FileTrack context — FR = File Request, PUC = perhaps a document type). Let me plan the design carefully.
+
+**Design Plan:**
+
+- **Brief:** A file tracking lookup + assignment form. Audience: clerks/admins. Job: search FR → auto-populate details → select a section → pick a file from an accordion → see status.
+- **Palette:** Deep navy `#1B2A4A` (authority/trust), off-white `#F7F8FA`, slate-blue `#4A6FA5`, amber `#F5A623` (open), emerald `#2ECC71` (done), crimson `#E74C3C` (partial). Accent: `#5B8DEF` for interactive states.
+- **Type:** Inter for UI clarity (government tools need legibility over personality). No-nonsense, structured.
+- **Signature element:** The accordion file list uses a subtle "folder tab" metaphor — selected item glows with a left border and lifts slightly.
+- **Layout:** Two-panel card — top: FR search + auto-populated details grid; bottom: section selector + accordion.
+
+Here's your FR Lookup form. Here's how everything works:
+
+**Step 1 — FR Search**
+Type an FR number like `fr no 2024-0045` and hit Search (or press Enter). The four detail fields — PUC Type, PUC No, FR Date, PUC Date — auto-populate and highlight in blue/green to signal they came from the database. Step 2 stays locked until a valid FR is found.
+
+**Step 2 — Section & File Assignment**
+Once an FR is loaded, pick a section from the dropdown. The accordion appears with grouped files. Each file shows:
+- 🟡 Yellow dot = **Open**
+- 🟢 Green dot = **Done**
+- 🔴 Red dot = **Partially Done**
+
+Click any file row to select it — it activates with a blue left-border highlight and a checkmark. A summary banner appears below showing the chosen file, with a Clear option.
+
+**To test with mock data, try these FR numbers:**
+- `fr no 2024-0045`
+- `fr no 2024-0012`
+- `fr no 2023-0099`
+- `fr no 2024-0078`
+
+To connect real data, swap `frDB` and `sectionFiles` with your actual API or Google Sheets fetch calls. Want me to wire up a Google Sheets integration for the live data?
