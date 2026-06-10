@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File Tracking System</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    background:#f1f5f9;
+    padding:30px;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+}
+
+.card{
+    background:#fff;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+h1{
+    color:#1e293b;
+    margin-bottom:20px;
+}
+
+h2{
+    font-size:18px;
+    margin-bottom:15px;
+    color:#334155;
+}
+
+.search-row{
+    display:flex;
+    gap:10px;
+}
+
+input,
+select{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    font-size:14px;
+}
+
+input[readonly]{
+    background:#f8fafc;
+}
+
+button{
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+.details-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+}
+
+.field label{
+    margin-bottom:6px;
+    font-weight:600;
+    color:#475569;
+}
+
+.accordion-item{
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    margin-bottom:10px;
+    overflow:hidden;
+}
+
+.accordion-header{
+    background:#e2e8f0;
+    padding:12px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.accordion-content{
+    display:none;
+    background:white;
+}
+
+.file-option{
+    padding:12px;
+    border-top:1px solid #e5e7eb;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.file-option:hover{
+    background:#f8fafc;
+}
+
+.file-option.active{
+    background:#dbeafe;
+    border-left:5px solid #2563eb;
+    font-weight:600;
+}
+
+.selected-file{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    padding:15px;
+    border-radius:8px;
+    color:#1e40af;
+    font-weight:600;
+}
+
+.status-container{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:600;
+}
+
+.status-dot{
+    width:16px;
+    height:16px;
+    border-radius:50%;
+}
+
+.open{
+    background:#facc15;
+}
+
+.partial{
+    background:#ef4444;
+}
+
+.done{
+    background:#22c55e;
+}
+
+@media(max-width:600px){
+
+    .search-row{
+        flex-direction:column;
+    }
+
+    button{
+        width:100%;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>File Tracking System</h1>
+
+    <!-- SEARCH -->
+    <div class="card">
+
+        <h2>Search FR</h2>
+
+        <div class="search-row">
+            <input
+                type="text"
+                id="frNo"
+                placeholder="Enter FR Number">
+            <button onclick="searchFR()">
+                Search
+            </button>
+        </div>
+
+    </div>
+
+    <!-- FR DETAILS -->
+    <div class="card">
+
+        <h2>FR Information</h2>
+
+        <div class="details-grid">
+
+            <div class="field">
+                <label>PUC Type</label>
+                <input id="pucType" readonly>
+            </div>
+
+            <div class="field">
+                <label>PUC No</label>
+                <input id="pucNo" readonly>
+            </div>
+
+            <div class="field">
+                <label>FR Date</label>
+                <input id="frDate" readonly>
+            </div>
+
+            <div class="field">
+                <label>PUC Date</label>
+                <input id="pucDate" readonly>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SECTION -->
+    <div class="card">
+
+        <h2>Select Section</h2>
+
+        <select id="sectionSelect">
+            <option value="">Select Section</option>
+            <option value="Accounts">Accounts</option>
+            <option value="Administration">Administration</option>
+            <option value="Establishment">Establishment</option>
+        </select>
+
+    </div>
+
+    <!-- FILES -->
+    <div class="card">
+
+        <h2>Available Files</h2>
+
+        <div id="accordionContainer">
+            Select a section first.
+        </div>
+
+    </div>
+
+    <!-- SELECTED FILE -->
+    <div class="card">
+
+        <h2>Selected File</h2>
+
+        <div
+            id="selectedFile"
+            class="selected-file">
+            No file selected
+        </div>
+
+    </div>
+
+    <!-- STATUS -->
+    <div class="card">
+
+        <h2>Status</h2>
+
+        <div class="status-container">
+
+            <select id="statusSelect">
+                <option value="open">Open</option>
+                <option value="partial">Partially Done</option>
+                <option value="done">Done</option>
+            </select>
+
+            <div class="status">
+                <span
+                    id="statusDot"
+                    class="status-dot open">
+                </span>
+
+                <span id="statusText">
+                    Open
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* ------------------------------
+   SAMPLE FR DATABASE
+--------------------------------*/
+
+const frDatabase = {
+
+    FR001:{
+        pucType:"Letter",
+        pucNo:"IMA(MZ)2026-2027/1",
+        frDate:"09-06-2026",
+        pucDate:"08-06-2026",
+        status:"open"
+    },
+
+    FR002:{
+        pucType:"Office Memorandum",
+        pucNo:"OM/123/2026",
+        frDate:"10-06-2026",
+        pucDate:"09-06-2026",
+        status:"done"
+    },
+
+    FR003:{
+        pucType:"Application",
+        pucNo:"APP/455/2026",
+        frDate:"11-06-2026",
+        pucDate:"10-06-2026",
+        status:"partial"
+    }
+};
+
+/* ------------------------------
+   FILES BY SECTION
+--------------------------------*/
+
+const sectionFiles = {
+
+    Accounts:[
+        {
+            title:"Salary Files",
+            files:[
+                {
+                    fileNo:"ACC-01",
+                    shortcut:"Salary"
+                },
+                {
+                    fileNo:"ACC-02",
+                    shortcut:"Pay Fixation"
+                }
+            ]
+        },
+        {
+            title:"Audit Files",
+            files:[
+                {
+                    fileNo:"ACC-03",
+                    shortcut:"Internal Audit"
+                },
+                {
+                    fileNo:"ACC-04",
+                    shortcut:"External Audit"
+                }
+            ]
+        }
+    ],
+
+    Administration:[
+        {
+            title:"General Administration",
+            files:[
+                {
+                    fileNo:"ADM-01",
+                    shortcut:"Meetings"
+                },
+                {
+                    fileNo:"ADM-02",
+                    shortcut:"Vehicles"
+                }
+            ]
+        }
+    ],
+
+    Establishment:[
+        {
+            title:"Service Matters",
+            files:[
+                {
+                    fileNo:"EST-01",
+                    shortcut:"Leave"
+                },
+                {
+                    fileNo:"EST-02",
+                    shortcut:"Service Book"
+                }
+            ]
+        }
+    ]
+};
+
+/* ------------------------------
+   SEARCH FR
+--------------------------------*/
+
+function searchFR(){
+
+    const frNo =
+        document
+        .getElementById("frNo")
+        .value
+        .trim();
+
+    const record =
+        frDatabase[frNo];
+
+    if(!record){
+
+        alert("FR Number not found");
+        return;
+    }
+
+    document.getElementById("pucType").value =
+        record.pucType;
+
+    document.getElementById("pucNo").value =
+        record.pucNo;
+
+    document.getElementById("frDate").value =
+        record.frDate;
+
+    document.getElementById("pucDate").value =
+        record.pucDate;
+
+    document.getElementById("statusSelect").value =
+        record.status;
+
+    updateStatus(record.status);
+}
+
+/* ------------------------------
+   STATUS UPDATE
+--------------------------------*/
+
+function updateStatus(status){
+
+    const dot =
+        document.getElementById("statusDot");
+
+    const text =
+        document.getElementById("statusText");
+
+    dot.className = "status-dot";
+
+    if(status==="open"){
+        dot.classList.add("open");
+        text.textContent = "Open";
+    }
+
+    if(status==="partial"){
+        dot.classList.add("partial");
+        text.textContent = "Partially Done";
+    }
+
+    if(status==="done"){
+        dot.classList.add("done");
+        text.textContent = "Done";
+    }
+}
+
+document
+.getElementById("statusSelect")
+.addEventListener("change", function(){
+
+    updateStatus(this.value);
+
+});
+
+/* ------------------------------
+   SECTION CHANGE
+--------------------------------*/
+
+document
+.getElementById("sectionSelect")
+.addEventListener("change", function(){
+
+    const section = this.value;
+
+    const container =
+        document.getElementById(
+            "accordionContainer"
+        );
+
+    container.innerHTML = "";
+
+    if(!section){
+
+        container.innerHTML =
+            "Select a section first.";
+
+        return;
+    }
+
+    sectionFiles[section]
+    .forEach(group=>{
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "accordion-item";
+
+        item.innerHTML = `
+            <div class="accordion-header">
+                ${group.title}
+            </div>
+
+            <div class="accordion-content">
+
+                ${group.files.map(file=>`
+
+                    <div
+                        class="file-option"
+                        data-file="${file.fileNo}"
+                        data-shortcut="${file.shortcut}">
+
+                        ${file.fileNo}
+                        -
+                        ${file.shortcut}
+
+                    </div>
+
+                `).join("")}
+
+            </div>
+        `;
+
+        container.appendChild(item);
+    });
+
+    bindAccordion();
+});
+
+/* ------------------------------
+   ACCORDION
+--------------------------------*/
+
+function bindAccordion(){
+
+    document
+    .querySelectorAll(
+        ".accordion-header"
+    )
+    .forEach(header=>{
+
+        header.onclick = ()=>{
+
+            const content =
+                header.nextElementSibling;
+
+            content.style.display =
+                content.style.display==="block"
+                ? "none"
+                : "block";
+        };
+    });
+
+    document
+    .querySelectorAll(
+        ".file-option"
+    )
+    .forEach(option=>{
+
+        option.onclick = ()=>{
+
+            document
+            .querySelectorAll(
+                ".file-option"
+            )
+            .forEach(item=>
+                item.classList.remove(
+                    "active"
+                )
+            );
+
+            option.classList.add(
+                "active"
+            );
+
+            document
+            .getElementById(
+                "selectedFile"
+            )
+            .innerHTML = `
+                File No:
+                ${option.dataset.file}
+                <br><br>
+                Shortcut:
+                ${option.dataset.shortcut}
+            `;
+        };
+    });
+}
+
+</script>
+
+</body>
+</html>
