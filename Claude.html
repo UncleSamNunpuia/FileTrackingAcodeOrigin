@@ -1,30 +1,839 @@
-Now let me design this. This is a government/records management form (FileTrack context — FR = File Request, PUC = perhaps a document type). Let me plan the design carefully.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FileTrack — FR Lookup</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-**Design Plan:**
+  :root {
+    --navy:       #1B2A4A;
+    --navy-light: #243656;
+    --slate:      #4A6FA5;
+    --blue:       #5B8DEF;
+    --blue-soft:  #EBF1FD;
+    --bg:         #F0F3F9;
+    --surface:    #FFFFFF;
+    --border:     #D6DCE8;
+    --text:       #1B2A4A;
+    --muted:      #6B7A99;
+    --amber:      #F5A623;
+    --amber-bg:   #FFF8EC;
+    --green:      #2ECC71;
+    --green-bg:   #EDFBF4;
+    --red:        #E74C3C;
+    --red-bg:     #FDECEA;
+  }
 
-- **Brief:** A file tracking lookup + assignment form. Audience: clerks/admins. Job: search FR → auto-populate details → select a section → pick a file from an accordion → see status.
-- **Palette:** Deep navy `#1B2A4A` (authority/trust), off-white `#F7F8FA`, slate-blue `#4A6FA5`, amber `#F5A623` (open), emerald `#2ECC71` (done), crimson `#E74C3C` (partial). Accent: `#5B8DEF` for interactive states.
-- **Type:** Inter for UI clarity (government tools need legibility over personality). No-nonsense, structured.
-- **Signature element:** The accordion file list uses a subtle "folder tab" metaphor — selected item glows with a left border and lifts slightly.
-- **Layout:** Two-panel card — top: FR search + auto-populated details grid; bottom: section selector + accordion.
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
 
-Here's your FR Lookup form. Here's how everything works:
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  .logo-mark {
+    width: 30px; height: 30px;
+    background: var(--blue);
+    border-radius: 7px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .logo-mark svg { display: block; }
+  header h1 {
+    font-size: 16px; font-weight: 700;
+    color: #fff; letter-spacing: .03em;
+  }
+  header span.sub {
+    font-size: 12px; color: rgba(255,255,255,.45);
+    font-weight: 400; margin-left: 2px;
+  }
 
-**Step 1 — FR Search**
-Type an FR number like `fr no 2024-0045` and hit Search (or press Enter). The four detail fields — PUC Type, PUC No, FR Date, PUC Date — auto-populate and highlight in blue/green to signal they came from the database. Step 2 stays locked until a valid FR is found.
+  /* ── MAIN LAYOUT ── */
+  main {
+    max-width: 860px;
+    margin: 36px auto;
+    padding: 0 16px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
 
-**Step 2 — Section & File Assignment**
-Once an FR is loaded, pick a section from the dropdown. The accordion appears with grouped files. Each file shows:
-- 🟡 Yellow dot = **Open**
-- 🟢 Green dot = **Done**
-- 🔴 Red dot = **Partially Done**
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 10px rgba(27,42,74,.06);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-header .step-badge {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    font-size: 11px; font-weight: 700;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .card-header h2 {
+    font-size: 13px; font-weight: 600;
+    color: var(--navy);
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+  .card-body { padding: 24px; }
 
-Click any file row to select it — it activates with a blue left-border highlight and a checkmark. A summary banner appears below showing the chosen file, with a Clear option.
+  /* ── SEARCH ROW ── */
+  .search-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .search-wrap {
+    position: relative;
+    flex: 1;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .search-wrap input {
+    width: 100%;
+    height: 42px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0 12px 0 38px;
+    font-family: inherit;
+    font-size: 14px; font-weight: 500;
+    color: var(--text);
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+    background: var(--bg);
+  }
+  .search-wrap input::placeholder { color: var(--muted); font-weight: 400; }
+  .search-wrap input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(91,141,239,.15);
+    background: #fff;
+  }
+  .btn-search {
+    height: 42px;
+    padding: 0 22px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+    display: flex; align-items: center; gap: 7px;
+    white-space: nowrap;
+  }
+  .btn-search:hover { background: #4a7de0; }
+  .btn-search:active { transform: scale(.98); }
 
-**To test with mock data, try these FR numbers:**
-- `fr no 2024-0045`
-- `fr no 2024-0012`
-- `fr no 2023-0099`
-- `fr no 2024-0078`
+  /* ── FR DETAILS GRID ── */
+  .fr-details {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .detail-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .detail-field label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+  }
+  .detail-field .val {
+    height: 38px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 0 12px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    background: #FAFBFD;
+    display: flex;
+    align-items: center;
+    transition: border-color .2s, background .2s;
+  }
+  .detail-field .val.populated {
+    background: var(--blue-soft);
+    border-color: var(--blue);
+    color: var(--navy);
+  }
+  .detail-field .val.empty {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .detail-field .val.date-val.populated {
+    background: #EDFAF6;
+    border-color: #2ECC71;
+  }
 
-To connect real data, swap `frDB` and `sectionFiles` with your actual API or Google Sheets fetch calls. Want me to wire up a Google Sheets integration for the live data?
+  /* ── SECTION SELECTOR ── */
+  .section-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .section-row label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+  }
+  .section-row select {
+    height: 42px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0 36px 0 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7A99' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .section-row select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(91,141,239,.15);
+    background-color: #fff;
+  }
+
+  /* ── ACCORDION ── */
+  .accordion-wrap {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .accordion-wrap.hidden { display: none; }
+
+  .accordion-item {
+    border-bottom: 1px solid var(--border);
+    transition: background .12s;
+  }
+  .accordion-item:last-child { border-bottom: none; }
+
+  .accordion-trigger {
+    width: 100%;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    text-align: left;
+    transition: background .12s;
+    position: relative;
+  }
+  .accordion-trigger:hover { background: var(--bg); }
+
+  .acc-chevron {
+    width: 18px; height: 18px;
+    border-radius: 4px;
+    background: var(--border);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    transition: background .15s, transform .2s;
+  }
+  .accordion-item.open .acc-chevron {
+    background: var(--blue);
+    transform: rotate(90deg);
+  }
+  .acc-chevron svg { display: block; }
+  .accordion-item.open .acc-chevron svg path { stroke: #fff; }
+
+  .acc-title {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .acc-subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: 4px;
+    font-weight: 400;
+  }
+  .acc-count {
+    font-size: 11px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2px 8px;
+    color: var(--muted);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .accordion-body {
+    display: none;
+    padding: 4px 12px 10px 12px;
+    background: #FAFBFD;
+    border-top: 1px solid var(--border);
+  }
+  .accordion-item.open .accordion-body { display: block; }
+
+  /* ── FILE ITEMS ── */
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 4px;
+  }
+
+  .file-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    background: var(--surface);
+    transition: border-color .15s, background .15s, box-shadow .15s;
+    user-select: none;
+    position: relative;
+  }
+  .file-item:hover {
+    background: var(--blue-soft);
+    border-color: rgba(91,141,239,.3);
+  }
+  .file-item.active {
+    background: var(--blue-soft);
+    border-color: var(--blue);
+    box-shadow: 0 2px 8px rgba(91,141,239,.18);
+  }
+  .file-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 4px; bottom: 4px;
+    width: 3px;
+    background: var(--blue);
+    border-radius: 0 3px 3px 0;
+  }
+
+  .file-icon {
+    width: 32px; height: 32px;
+    border-radius: 7px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    transition: background .15s;
+  }
+  .file-item.active .file-icon {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+  .file-item.active .file-icon svg path,
+  .file-item.active .file-icon svg rect { stroke: #fff; }
+
+  .file-info { flex: 1; min-width: 0; }
+  .file-no {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .file-shortcut {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── STATUS DOT ── */
+  .status-dot {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .status-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    opacity: .25;
+  }
+  .status-dot.open    { background: var(--amber);  }
+  .status-dot.open::after    { background: var(--amber); }
+  .status-dot.done    { background: var(--green);  }
+  .status-dot.done::after    { background: var(--green); }
+  .status-dot.partial { background: var(--red);    }
+  .status-dot.partial::after { background: var(--red); }
+
+  .status-label {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+  }
+  .status-label.open    { color: #B36B00; background: var(--amber-bg); border: 1px solid #F5C76A; }
+  .status-label.done    { color: #1A8A4A; background: var(--green-bg); border: 1px solid #7EE4A8; }
+  .status-label.partial { color: #B02B1D; background: var(--red-bg);   border: 1px solid #F0998F; }
+
+  .check-mark {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    color: var(--blue);
+    display: none;
+  }
+  .file-item.active .check-mark { display: block; }
+
+  /* ── SELECTED FILE SUMMARY ── */
+  .selected-summary {
+    display: none;
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--blue-soft);
+    border: 1.5px solid var(--blue);
+    border-radius: 10px;
+    align-items: center;
+    gap: 12px;
+  }
+  .selected-summary.visible { display: flex; }
+  .selected-summary svg { flex-shrink: 0; color: var(--blue); }
+  .sel-text { flex: 1; }
+  .sel-text .sel-label { font-size: 11px; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: .06em; }
+  .sel-text .sel-val   { font-size: 14px; font-weight: 700; color: var(--navy); margin-top: 2px; }
+  .sel-clear {
+    font-size: 12px; color: var(--blue);
+    background: none; border: none;
+    cursor: pointer; font-family: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 32px 16px;
+    color: var(--muted);
+  }
+  .empty-state svg { margin: 0 auto 10px; display: block; }
+  .empty-state p { font-size: 13px; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--navy);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 6px 20px rgba(0,0,0,.2);
+    display: flex; align-items: center; gap: 9px;
+    transform: translateY(80px); opacity: 0;
+    transition: transform .3s, opacity .3s;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .fr-details { grid-template-columns: repeat(2, 1fr); }
+    header h1 { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-mark">
+    <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+      <rect x="2" y="2" width="5" height="6" rx="1" fill="white" opacity=".9"/>
+      <rect x="9" y="2" width="5" height="4" rx="1" fill="white" opacity=".6"/>
+      <rect x="2" y="10" width="12" height="4" rx="1" fill="white" opacity=".75"/>
+    </svg>
+  </div>
+  <h1>FileTrack <span class="sub">/ FR Lookup</span></h1>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <!-- STEP 1: FR SEARCH -->
+  <div class="card" id="card-search">
+    <div class="card-header">
+      <div class="step-badge">1</div>
+      <h2>File Request Lookup</h2>
+    </div>
+    <div class="card-body">
+      <div class="search-row">
+        <div class="search-wrap">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" id="fr-input" placeholder="Type FR No (e.g. fr no 2024-0045)" autocomplete="off" />
+        </div>
+        <button class="btn-search" onclick="searchFR()">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          Search
+        </button>
+      </div>
+
+      <!-- FR DETAILS GRID -->
+      <div class="fr-details" id="fr-details">
+        <div class="detail-field">
+          <label>PUC Type</label>
+          <div class="val empty" id="val-puc-type">—</div>
+        </div>
+        <div class="detail-field">
+          <label>PUC No.</label>
+          <div class="val empty" id="val-puc-no">—</div>
+        </div>
+        <div class="detail-field">
+          <label>FR Date</label>
+          <div class="val empty date-val" id="val-fr-date">—</div>
+        </div>
+        <div class="detail-field">
+          <label>PUC Date</label>
+          <div class="val empty date-val" id="val-puc-date">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: SECTION + FILE SELECTION -->
+  <div class="card" id="card-section" style="opacity:.45; pointer-events:none;">
+    <div class="card-header">
+      <div class="step-badge">2</div>
+      <h2>Section &amp; File Assignment</h2>
+    </div>
+    <div class="card-body">
+
+      <div class="section-row">
+        <label>Section</label>
+        <select id="section-select" onchange="loadSection()">
+          <option value="">— Select a section —</option>
+          <option value="civil">Civil</option>
+          <option value="criminal">Criminal</option>
+          <option value="revenue">Revenue</option>
+          <option value="land">Land &amp; Survey</option>
+          <option value="admin">Administration</option>
+        </select>
+      </div>
+
+      <!-- SELECTED SUMMARY -->
+      <div class="selected-summary" id="selected-summary">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <div class="sel-text">
+          <div class="sel-label">Selected File</div>
+          <div class="sel-val" id="sel-val">—</div>
+        </div>
+        <button class="sel-clear" onclick="clearSelection()">Clear</button>
+      </div>
+
+      <!-- ACCORDION -->
+      <div id="accordion-container" class="accordion-wrap hidden"></div>
+
+      <!-- EMPTY STATE (before section pick) -->
+      <div class="empty-state" id="empty-state">
+        <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="#C4CCDB" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 012-2h5l2 2h7a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+        </svg>
+        <p>Select a section to view available files</p>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-dot"></span>
+  <span id="toast-msg">File selected</span>
+</div>
+
+<script>
+/* ── MOCK DATABASE ── */
+const frDB = {
+  "fr no 2024-0045": { pucType: "Type-A Civil",  pucNo: "PUC-2024-112", frDate: "12 Jan 2024", pucDate: "14 Jan 2024" },
+  "fr no 2024-0012": { pucType: "Type-B Revenue",pucNo: "PUC-2024-034", frDate: "03 Mar 2024", pucDate: "07 Mar 2024" },
+  "fr no 2023-0099": { pucType: "Type-C Land",   pucNo: "PUC-2023-289", frDate: "22 Nov 2023", pucDate: "25 Nov 2023" },
+  "fr no 2024-0078": { pucType: "Type-A Admin",  pucNo: "PUC-2024-201", frDate: "05 Aug 2024", pucDate: "08 Aug 2024" },
+};
+
+const sectionFiles = {
+  civil: [
+    { group: "Active Files", files: [
+      { no: "CIV-2024-001", shortcut: "Sharma vs State – Land Dispute", status: "open" },
+      { no: "CIV-2024-002", shortcut: "Mehta Property Settlement",      status: "done" },
+      { no: "CIV-2024-003", shortcut: "Reddy Family Partition Suit",    status: "partial" },
+    ]},
+    { group: "Archived Files", files: [
+      { no: "CIV-2023-041", shortcut: "Khan Estate Distribution",       status: "done" },
+      { no: "CIV-2023-056", shortcut: "Nair vs Municipality",           status: "done" },
+    ]},
+  ],
+  criminal: [
+    { group: "Active Files", files: [
+      { no: "CRM-2024-010", shortcut: "FIR 45/2024 – Theft Case",       status: "open" },
+      { no: "CRM-2024-011", shortcut: "FIR 78/2024 – Assault",          status: "partial" },
+    ]},
+    { group: "Pending Review", files: [
+      { no: "CRM-2024-022", shortcut: "Bail Application – Verma",       status: "open" },
+      { no: "CRM-2023-099", shortcut: "Appeal Case – Desai",            status: "done" },
+    ]},
+  ],
+  revenue: [
+    { group: "Tax Files", files: [
+      { no: "REV-2024-005", shortcut: "Commercial Tax Appeal – Okafor",  status: "open" },
+      { no: "REV-2024-006", shortcut: "GST Dispute – Singh Traders",     status: "done" },
+      { no: "REV-2024-007", shortcut: "Income Tax Rectification – Lal",  status: "partial" },
+    ]},
+  ],
+  land: [
+    { group: "Survey Records", files: [
+      { no: "LND-2024-003", shortcut: "Survey No. 112/A – Village Karad", status: "done" },
+      { no: "LND-2024-004", shortcut: "Boundary Dispute – Pune East",     status: "open" },
+    ]},
+    { group: "Registration", files: [
+      { no: "LND-2024-010", shortcut: "Mutation Entry – Plot 45B",        status: "partial" },
+      { no: "LND-2024-011", shortcut: "Sub-Division Approval – Bhor",     status: "open" },
+    ]},
+  ],
+  admin: [
+    { group: "Office Files", files: [
+      { no: "ADM-2024-001", shortcut: "Staff Transfer Orders – Batch 3",  status: "done" },
+      { no: "ADM-2024-002", shortcut: "Budget Allocation FY 2024-25",     status: "open" },
+      { no: "ADM-2024-003", shortcut: "Annual Leave Register",            status: "partial" },
+    ]},
+  ],
+};
+
+/* ── STATE ── */
+let activeFile = null;
+let frLoaded = false;
+
+/* ── SEARCH ── */
+function searchFR() {
+  const raw = document.getElementById('fr-input').value.trim().toLowerCase();
+  const data = frDB[raw];
+
+  if (!data) {
+    showToast("FR No not found. Try: fr no 2024-0045", "error");
+    clearFRFields();
+    return;
+  }
+
+  document.getElementById('val-puc-type').textContent = data.pucType;
+  document.getElementById('val-puc-no').textContent   = data.pucNo;
+  document.getElementById('val-fr-date').textContent  = data.frDate;
+  document.getElementById('val-puc-date').textContent = data.pucDate;
+
+  ['val-puc-type','val-puc-no'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('empty'); el.classList.add('populated');
+  });
+  ['val-fr-date','val-puc-date'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('empty'); el.classList.add('populated','date-val');
+  });
+
+  // unlock step 2
+  const card = document.getElementById('card-section');
+  card.style.opacity = '1';
+  card.style.pointerEvents = 'auto';
+  frLoaded = true;
+  showToast("FR details loaded successfully");
+}
+
+function clearFRFields() {
+  ['val-puc-type','val-puc-no','val-fr-date','val-puc-date'].forEach(id => {
+    const el = document.getElementById(id);
+    el.textContent = '—';
+    el.classList.remove('populated','date-val');
+    el.classList.add('empty');
+  });
+}
+
+/* ── ENTER KEY ── */
+document.getElementById('fr-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') searchFR();
+});
+
+/* ── SECTION LOAD ── */
+function loadSection() {
+  const sec = document.getElementById('section-select').value;
+  const container = document.getElementById('accordion-container');
+  const emptyState = document.getElementById('empty-state');
+
+  clearSelection();
+  container.innerHTML = '';
+
+  if (!sec) {
+    container.classList.add('hidden');
+    emptyState.style.display = '';
+    return;
+  }
+
+  emptyState.style.display = 'none';
+  container.classList.remove('hidden');
+
+  const groups = sectionFiles[sec] || [];
+  groups.forEach((group, gi) => {
+    const item = document.createElement('div');
+    item.className = 'accordion-item';
+    item.dataset.groupIndex = gi;
+
+    item.innerHTML = `
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span class="acc-chevron">
+          <svg width="8" height="12" fill="none" viewBox="0 0 8 14">
+            <path d="M1 1l6 6-6 6" stroke="#6B7A99" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="acc-title">${group.group}</span>
+        <span class="acc-count">${group.files.length} file${group.files.length !== 1 ? 's' : ''}</span>
+      </button>
+      <div class="accordion-body">
+        <div class="file-list" id="file-list-${gi}"></div>
+      </div>`;
+
+    container.appendChild(item);
+
+    const list = document.getElementById(`file-list-${gi}`);
+    group.files.forEach(file => {
+      const fi = document.createElement('div');
+      fi.className = 'file-item';
+      fi.dataset.fileNo = file.no;
+      fi.dataset.shortcut = file.shortcut;
+      fi.dataset.status = file.status;
+      fi.onclick = () => selectFile(fi, file);
+
+      const statusLabel = { open: 'Open', done: 'Done', partial: 'Partial' }[file.status];
+
+      fi.innerHTML = `
+        <div class="file-icon">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#6B7A99" stroke-width="1.8">
+            <rect x="4" y="3" width="12" height="16" rx="2" stroke-linecap="round"/>
+            <path d="M8 8h6M8 12h4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="file-info">
+          <div class="file-no">${file.no}</div>
+          <div class="file-shortcut">${file.shortcut}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="status-dot ${file.status}"></span>
+          <span class="status-label ${file.status}">${statusLabel}</span>
+        </div>
+        <svg class="check-mark" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>`;
+
+      list.appendChild(fi);
+    });
+
+    // open first accordion by default
+    if (gi === 0) item.classList.add('open');
+  });
+}
+
+/* ── ACCORDION TOGGLE ── */
+function toggleAccordion(btn) {
+  const item = btn.closest('.accordion-item');
+  item.classList.toggle('open');
+}
+
+/* ── FILE SELECT ── */
+function selectFile(el, file) {
+  // deselect previous
+  document.querySelectorAll('.file-item.active').forEach(f => f.classList.remove('active'));
+
+  el.classList.add('active');
+  activeFile = file;
+
+  const summary = document.getElementById('selected-summary');
+  document.getElementById('sel-val').textContent = `${file.no} — ${file.shortcut}`;
+  summary.classList.add('visible');
+
+  showToast(`${file.no} selected`);
+}
+
+function clearSelection() {
+  document.querySelectorAll('.file-item.active').forEach(f => f.classList.remove('active'));
+  activeFile = null;
+  document.getElementById('selected-summary').classList.remove('visible');
+}
+
+/* ── TOAST ── */
+let toastTimer;
+function showToast(msg, type = "success") {
+  const toast = document.getElementById('toast');
+  const dot = toast.querySelector('.toast-dot');
+  document.getElementById('toast-msg').textContent = msg;
+  dot.style.background = type === "error" ? "#E74C3C" : "#2ECC71";
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
