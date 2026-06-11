@@ -1,0 +1,721 @@
+<!-- Here is an HTML document that creates a complete FR management interface. It allows you to search for an FR number, autofills related details, and then dynamically loads files into an accordion list based on the selected section. -->
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FR Manager | Dynamic Document Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            padding: 2rem 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* main card container */
+        .fr-container {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* header */
+        .header {
+            background: #1e2a3e;
+            padding: 1.3rem 2rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-weight: 600;
+            font-size: 1.6rem;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header h1 small {
+            font-size: 0.8rem;
+            font-weight: 400;
+            background: #2d3e54;
+            padding: 4px 10px;
+            border-radius: 40px;
+            margin-left: 12px;
+        }
+
+        /* content area */
+        .content {
+            padding: 2rem 2rem 2rem 2rem;
+        }
+
+        /* search row */
+        .search-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+            margin-bottom: 32px;
+            background: #f8fafc;
+            padding: 1.2rem 1.4rem;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .fr-input-group {
+            flex: 2;
+            min-width: 180px;
+        }
+
+        .fr-input-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .fr-input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            background: white;
+            transition: 0.2s;
+        }
+
+        .fr-input-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        .search-btn {
+            background: #1e2a3e;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+
+        .search-btn:hover {
+            background: #0f172a;
+            transform: scale(0.97);
+        }
+
+        /* details grid */
+        .details-grid {
+            background: #ffffff;
+            border: 1px solid #eef2ff;
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .details-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #0f172a;
+            border-left: 4px solid #3b82f6;
+            padding-left: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 32px;
+            margin-top: 8px;
+        }
+
+        .info-item {
+            flex: 1 1 180px;
+        }
+
+        .info-item label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #5b6e8c;
+            letter-spacing: 0.3px;
+            display: block;
+        }
+
+        .info-item .value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #0f172a;
+            margin-top: 6px;
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 16px;
+            display: inline-block;
+            min-width: 140px;
+        }
+
+        /* section dropdown */
+        .section-control {
+            margin: 20px 0 18px 0;
+        }
+
+        .section-control label {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #1e293b;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        #sectionSelect {
+            width: 100%;
+            max-width: 380px;
+            padding: 12px 16px;
+            border-radius: 40px;
+            border: 1.5px solid #cbd5e1;
+            background: white;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* accordion style area (selectable file list) */
+        .accordion-area {
+            margin-top: 28px;
+            border-top: 2px dashed #e2e8f0;
+            padding-top: 20px;
+        }
+
+        .accordion-header {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .file-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* file item card — acts like accordion item (clickable) */
+        .file-item {
+            background: #ffffff;
+            border: 1px solid #e2edff;
+            border-radius: 20px;
+            padding: 0.9rem 1.2rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .file-item:hover {
+            background: #fafcff;
+            border-color: #b9d0f8;
+            transform: translateX(4px);
+        }
+
+        .file-item.active {
+            background: #eef4ff;
+            border-left: 6px solid #2563eb;
+            border-radius: 20px;
+            box-shadow: 0 6px 12px -6px rgba(37,99,235,0.2);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            flex: 3;
+        }
+
+        .file-details {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .file-details strong {
+            color: #1e293b;
+        }
+
+        .file-no-badge {
+            background: #f1f5f9;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-family: monospace;
+            font-weight: 500;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .status-circle {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
+        }
+
+        .status-text {
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: capitalize;
+            color: #334155;
+        }
+
+        /* selected feedback */
+        .chosen-feedback {
+            background: #eef2ff;
+            margin-top: 20px;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #1e293b;
+            border: 1px solid #cddffc;
+        }
+
+        .error-msg {
+            color: #dc2626;
+            background: #fee2e2;
+            padding: 10px 18px;
+            border-radius: 28px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+
+        .info-message {
+            background: #f1f3f5;
+            padding: 16px;
+            border-radius: 24px;
+            text-align: center;
+            color: #4b5563;
+        }
+
+        hr {
+            margin: 12px 0;
+        }
+
+        button {
+            background: none;
+            border: none;
+        }
+
+        @media (max-width: 680px) {
+            .content {
+                padding: 1.3rem;
+            }
+            .file-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .status-indicator {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="fr-container">
+    <div class="header">
+        <h1>📄 FR Document Hub 
+            <small>tracker · sections · files</small>
+        </h1>
+    </div>
+    <div class="content">
+        <!-- FR SEARCH SECTION -->
+        <div class="search-area">
+            <div class="fr-input-group">
+                <label>🔍 FR NUMBER</label>
+                <input type="text" id="frInput" placeholder="e.g., FR001, FR002, FR003" autocomplete="off">
+            </div>
+            <button class="search-btn" id="searchBtn">🔎 Search & Load</button>
+        </div>
+
+        <!-- AUTO-POPULATED DETAILS (from DB mock) -->
+        <div class="details-grid">
+            <div class="details-title">📌 FR Details (auto-populated)</div>
+            <div class="info-row">
+                <div class="info-item"><label>📑 PUC TYPE</label><div class="value" id="pucTypeVal">—</div></div>
+                <div class="info-item"><label>🔢 PUC NO</label><div class="value" id="pucNoVal">—</div></div>
+                <div class="info-item"><label>📅 FR DATE</label><div class="value" id="frDateVal">—</div></div>
+                <div class="info-item"><label>🔄 PUC DATE</label><div class="value" id="pucDateVal">—</div></div>
+            </div>
+        </div>
+
+        <!-- SECTION DROPDOWN (depends on FR) -->
+        <div class="section-control">
+            <label>📂 Select Section</label>
+            <select id="sectionSelect" disabled>
+                <option value="">— First search an FR —</option>
+            </select>
+        </div>
+
+        <!-- ACCORDION AREA: shows file no + shortcut list with status circles -->
+        <div class="accordion-area">
+            <div class="accordion-header">
+                <span>📑 Files & Shortcuts</span>
+                <span style="font-size: 12px; background: #eef2ff; padding: 2px 12px; border-radius: 40px;">click to select & activate</span>
+            </div>
+            <div id="accordionContainer" class="file-list-container">
+                <div class="info-message">⚡ No section selected / Load an FR then choose a section</div>
+            </div>
+        </div>
+
+        <!-- ACTIVE / CHOSEN FEEDBACK -->
+        <div id="chosenDisplay" class="chosen-feedback">
+            🟡 No file selected yet. Click any file above to mark as chosen.
+        </div>
+        <div id="errorMsg" style="margin-top: 12px;"></div>
+    </div>
+</div>
+
+<script>
+    // ----------------------------- MOCK DATABASE (simulates DB / Google Sheet) -----------------------------
+    // Each FR entry has main details + sections containing files with status & shortcut
+    const MOCK_DATA = {
+        "FR001": {
+            puc_type: "Heavy Vehicle",
+            puc_no: "PUC-21A4F9",
+            fr_date: "2024-02-10",
+            puc_date: "2024-08-15",
+            sections: {
+                "Environmental Compliance": [
+                    { file_no: "ENV/FR001/01", shortcut: "ENV-01", status: "open" },
+                    { file_no: "ENV/FR001/02", shortcut: "ENV-02", status: "done" },
+                    { file_no: "ENV/FR001/03", shortcut: "ENV-03", status: "partially_done" }
+                ],
+                "Safety & Audit": [
+                    { file_no: "SAF/FR001/A12", shortcut: "SAF-A12", status: "partially_done" },
+                    { file_no: "SAF/FR001/B44", shortcut: "SAF-B44", status: "open" },
+                    { file_no: "SAF/FR001/C99", shortcut: "SAF-C99", status: "done" }
+                ],
+                "Technical Review": [
+                    { file_no: "TECH/FR001/X1", shortcut: "TECH-X1", status: "done" },
+                    { file_no: "TECH/FR001/X2", shortcut: "TECH-X2", status: "open" }
+                ]
+            }
+        },
+        "FR002": {
+            puc_type: "Light Motor Vehicle",
+            puc_no: "PUC-88B3D2",
+            fr_date: "2023-11-20",
+            puc_date: "2024-03-01",
+            sections: {
+                "Finance & Billing": [
+                    { file_no: "FIN/FR002/101", shortcut: "FIN-101", status: "done" },
+                    { file_no: "FIN/FR002/102", shortcut: "FIN-102", status: "open" },
+                    { file_no: "FIN/FR002/103", shortcut: "FIN-103", status: "partially_done" }
+                ],
+                "Legal Approvals": [
+                    { file_no: "LEG/FR002/77L", shortcut: "LEG-77L", status: "partially_done" },
+                    { file_no: "LEG/FR002/88M", shortcut: "LEG-88M", status: "open" }
+                ]
+            }
+        },
+        "FR003": {
+            puc_type: "Electric Vehicle",
+            puc_no: "PUC-EV9923",
+            fr_date: "2024-05-01",
+            puc_date: "2024-09-30",
+            sections: {
+                "Battery & Cells": [
+                    { file_no: "BAT/FR003/AA1", shortcut: "BAT-AA1", status: "open" },
+                    { file_no: "BAT/FR003/BB2", shortcut: "BAT-BB2", status: "done" }
+                ],
+                "Charging Infrastructure": [
+                    { file_no: "CHG/FR003/C01", shortcut: "CHG-C01", status: "partially_done" },
+                    { file_no: "CHG/FR003/C02", shortcut: "CHG-C02", status: "open" },
+                    { file_no: "CHG/FR003/C03", shortcut: "CHG-C03", status: "done" }
+                ]
+            }
+        }
+    };
+
+    // Helper: map status to color (circle) and readable text
+    function getStatusStyle(status) {
+        switch(status) {
+            case 'open': return { bg: '#eab308', label: 'Open' };        // yellow
+            case 'done': return { bg: '#22c55e', label: 'Done' };         // green
+            case 'partially_done': return { bg: '#ef4444', label: 'Partially Done' }; // red
+            default: return { bg: '#94a3b8', label: 'Unknown' };
+        }
+    }
+
+    // DOM elements
+    const frInput = document.getElementById('frInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const pucTypeVal = document.getElementById('pucTypeVal');
+    const pucNoVal = document.getElementById('pucNoVal');
+    const frDateVal = document.getElementById('frDateVal');
+    const pucDateVal = document.getElementById('pucDateVal');
+    const sectionSelect = document.getElementById('sectionSelect');
+    const accordionContainer = document.getElementById('accordionContainer');
+    const chosenDisplay = document.getElementById('chosenDisplay');
+    const errorMsgDiv = document.getElementById('errorMsg');
+
+    // State variables
+    let currentFRData = null;          // holds current fr object (sections, details)
+    let currentFRKey = null;            // FR001 etc
+    let activeFileItem = null;           // currently chosen file element
+    let activeFileData = null;            // store selected file obj {file_no, shortcut, status}
+
+    // Helper to reset UI on new FR search (clear section & accordion)
+    function resetAfterSearch() {
+        // reset dropdown
+        sectionSelect.innerHTML = '<option value="">— Select a section —</option>';
+        sectionSelect.disabled = true;
+        // reset accordion area
+        accordionContainer.innerHTML = '<div class="info-message">📂 Please select a section from dropdown</div>';
+        // reset chosen feedback
+        chosenDisplay.innerHTML = '🟡 No file selected yet. Click any file above to mark as chosen.';
+        activeFileItem = null;
+        activeFileData = null;
+        errorMsgDiv.innerHTML = '';
+    }
+
+    // populate details from currentFRData
+    function populateDetails(frData) {
+        pucTypeVal.innerText = frData.puc_type || '—';
+        pucNoVal.innerText = frData.puc_no || '—';
+        frDateVal.innerText = frData.fr_date || '—';
+        pucDateVal.innerText = frData.puc_date || '—';
+    }
+
+    // populate section dropdown based on current FR sections
+    function populateSectionDropdown() {
+        if (!currentFRData || !currentFRData.sections) {
+            sectionSelect.disabled = true;
+            sectionSelect.innerHTML = '<option value="">— No sections found —</option>';
+            return;
+        }
+        const sections = Object.keys(currentFRData.sections);
+        if (sections.length === 0) {
+            sectionSelect.disabled = true;
+            sectionSelect.innerHTML = '<option value="">— No sections available —</option>';
+            return;
+        }
+        sectionSelect.disabled = false;
+        let options = '<option value="">— Select a section —</option>';
+        sections.forEach(sectionName => {
+            options += `<option value="${escapeHtml(sectionName)}">📁 ${escapeHtml(sectionName)}</option>`;
+        });
+        sectionSelect.innerHTML = options;
+    }
+
+    // Utility to escape HTML (avoid injection)
+    function escapeHtml(str) {
+        if(!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // Render accordion (file list) based on selected section name
+    function renderAccordionBySection(sectionName) {
+        if (!currentFRData || !currentFRData.sections || !sectionName) {
+            accordionContainer.innerHTML = '<div class="info-message">⚠️ No section selected or FR data missing</div>';
+            return;
+        }
+        const filesArray = currentFRData.sections[sectionName];
+        if (!filesArray || filesArray.length === 0) {
+            accordionContainer.innerHTML = '<div class="info-message">📭 No files found in this section.</div>';
+            return;
+        }
+
+        // build list of file entries (each acts like accordion item but click-selectable)
+        let itemsHtml = '';
+        filesArray.forEach((file, idx) => {
+            const statusStyle = getStatusStyle(file.status);
+            const circleColor = statusStyle.bg;
+            const statusLabel = statusStyle.label;
+            const fileNoSafe = escapeHtml(file.file_no);
+            const shortcutSafe = escapeHtml(file.shortcut);
+            itemsHtml += `
+                <div class="file-item" data-file-no="${escapeHtml(file.file_no)}" data-shortcut="${escapeHtml(file.shortcut)}" data-status="${file.status}" data-idx="${idx}">
+                    <div class="file-info">
+                        <div class="file-details">
+                            <span class="file-no-badge">📄 ${fileNoSafe}</span>
+                            <span>⚡ shortcut: <strong>${shortcutSafe}</strong></span>
+                        </div>
+                    </div>
+                    <div class="status-indicator">
+                        <span class="status-circle" style="background-color: ${circleColor};"></span>
+                        <span class="status-text">${statusLabel}</span>
+                    </div>
+                </div>
+            `;
+        });
+        accordionContainer.innerHTML = itemsHtml;
+
+        // Attach click event listeners to each file-item (event delegation also works, but attach after render)
+        document.querySelectorAll('.file-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                // prevent event bubbling
+                e.stopPropagation();
+                // remove active class from all file items
+                document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
+                // add active class to clicked item
+                item.classList.add('active');
+                // store active file data
+                const fileNo = item.getAttribute('data-file-no');
+                const shortcut = item.getAttribute('data-shortcut');
+                const status = item.getAttribute('data-status');
+                activeFileData = { file_no: fileNo, shortcut: shortcut, status: status };
+                activeFileItem = item;
+                // update chosen feedback
+                const statusStyleActive = getStatusStyle(status);
+                chosenDisplay.innerHTML = `✅ CHOSEN ACTIVE FILE —  File No: <strong>${escapeHtml(fileNo)}</strong>  |  Shortcut: <strong>${escapeHtml(shortcut)}</strong>  |  Status: <span style="display:inline-flex;align-items:center;gap:6px;"><span class="status-circle" style="background-color:${statusStyleActive.bg};"></span> ${statusStyleActive.label}</span>`;
+            });
+        });
+    }
+
+    // main search logic: find FR by key, fill details, reset section + accordion, then setup dropdown
+    function handleSearch() {
+        let frNumber = frInput.value.trim();
+        if (frNumber === "") {
+            errorMsgDiv.innerHTML = '<div class="error-msg">❌ Please enter an FR number (e.g., FR001, FR002, FR003).</div>';
+            return;
+        }
+        // case insensitive matching but our keys are exact (FR001, FR002...)
+        let foundKey = null;
+        if (MOCK_DATA[frNumber]) {
+            foundKey = frNumber;
+        } else {
+            // try uppercase mapping
+            const upperKey = frNumber.toUpperCase();
+            if (MOCK_DATA[upperKey]) foundKey = upperKey;
+        }
+        if (!foundKey) {
+            errorMsgDiv.innerHTML = `<div class="error-msg">⚠️ FR "${escapeHtml(frNumber)}" not found in database. Try FR001, FR002 or FR003.</div>`;
+            // reset all fields
+            pucTypeVal.innerText = '—';
+            pucNoVal.innerText = '—';
+            frDateVal.innerText = '—';
+            pucDateVal.innerText = '—';
+            resetAfterSearch();
+            currentFRData = null;
+            currentFRKey = null;
+            return;
+        }
+        errorMsgDiv.innerHTML = ''; // clear error
+        currentFRKey = foundKey;
+        currentFRData = MOCK_DATA[currentFRKey];
+        // populate details
+        populateDetails(currentFRData);
+        // reset UI accordion & selection
+        resetAfterSearch();
+        // populate section dropdown based on FR sections
+        populateSectionDropdown();
+        // after dropdown ready, clear any selected file
+        activeFileItem = null;
+        activeFileData = null;
+        chosenDisplay.innerHTML = '🟡 No file selected yet. Click any file above to mark as chosen.';
+        // if there are sections, we optionally show placeholder
+        if (currentFRData.sections && Object.keys(currentFRData.sections).length > 0) {
+            accordionContainer.innerHTML = '<div class="info-message">✨ Select a section from dropdown to see files (accordion list).</div>';
+        } else {
+            accordionContainer.innerHTML = '<div class="info-message">📭 No sections defined for this FR.</div>';
+        }
+    }
+
+    // section dropdown change event
+    function onSectionChange() {
+        if (!currentFRData) {
+            accordionContainer.innerHTML = '<div class="info-message">🔍 No FR loaded. Please search first.</div>';
+            return;
+        }
+        const selectedSection = sectionSelect.value;
+        if (!selectedSection) {
+            accordionContainer.innerHTML = '<div class="info-message">📂 Please choose a section to see files & shortcuts.</div>';
+            // clear chosen display but keep general
+            chosenDisplay.innerHTML = '🟡 No file selected yet. Select a section and click a file.';
+            activeFileItem = null;
+            activeFileData = null;
+            return;
+        }
+        // render accordion with files & shortcuts based on section
+        renderAccordionBySection(selectedSection);
+        // after new section, reset active file selection (since new file list)
+        activeFileItem = null;
+        activeFileData = null;
+        // update chosen display message to neutral but keep feedback
+        if (accordionContainer.children.length > 0 && !accordionContainer.innerHTML.includes('info-message')) {
+            chosenDisplay.innerHTML = '🟡 Click on any file above to mark as chosen.';
+        } else {
+            chosenDisplay.innerHTML = '🟡 No files available in this section.';
+        }
+    }
+
+    // Add event listeners
+    searchBtn.addEventListener('click', handleSearch);
+    sectionSelect.addEventListener('change', onSectionChange);
+    
+    // allow pressing Enter in input
+    frInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSearch();
+        }
+    });
+
+    // optional: provide initial instruction and demo default presets
+    window.addEventListener('DOMContentLoaded', () => {
+        // demo hint: set placeholder example
+        frInput.placeholder = "e.g., FR001, FR002, FR003";
+        // small preset note to show functionality (no auto load)
+        accordionContainer.innerHTML = '<div class="info-message">🔎 Search an FR number (FR001, FR002, FR003) → details autofill → pick section → files appear with status circles → click to activate</div>';
+        // also status demo legend inside chosen area via initial
+    });
+</script>
+</body>
+</html>
