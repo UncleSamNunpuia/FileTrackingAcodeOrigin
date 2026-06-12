@@ -1,5 +1,5 @@
 
-documment.addEventListener("DOMContentLoaded", () => {
+// documment.addEventListener("DOMContentLoaded", () => {
 /* ------------------------------
    SAMPLE FR DATABASE
 --------------------------------*/
@@ -415,7 +415,6 @@ document
     );
 
 });
-}
 
 // When user clicks Put Up, the object becomes:
 
