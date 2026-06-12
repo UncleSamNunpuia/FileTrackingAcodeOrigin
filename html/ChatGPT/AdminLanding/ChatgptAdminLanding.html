@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chatgpt-File Tracking Admin Dashboard</title>
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+      body{background:#f1f5f9}
+      .wrapper{display:flex;min-height:100vh}
+      .sidebar{width:260px;background:#1e293b;color:#fff;padding:20px}
+      .logo{font-size:22px;font-weight:700;margin-bottom:30px}
+      .menu{list-style:none}
+      .menu li{margin-bottom:10px}
+      .menu a{display:block;text-decoration:none;color:#fff;padding:12px;border-radius:8px}
+      .menu a:hover,.active-menu{background:#2563eb}
+      .main{flex:1;padding:25px}a
+      .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+      .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+      .card,.stat-card,.activities{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+      .card{padding:25px}
+      .card h3{margin-bottom:15px}
+      .card p{margin-bottom:20px;color:#64748b}
+      .btn{border:none;padding:10px 18px;border-radius:8px;curso    r:pointer;background:#2563eb;color:#fff}
+      .stats{margin-top:25px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+      .stat-card{padding:20px}
+      .stat-card h2{color:#2563eb;margin-top:10px}
+      .activities{margin-top:25px;padding:20px} Deep See
+      .activities ul{padding-left:20px;margin-top:10px}
+      .activities li{margin-bottom:8px}
+
+      /* Modal */
+      .modal-overlay{
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.45);
+      backdrop-filter:blur(5px);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      z-index:9999;
+      }
+      .modal-card{
+      width:90%;
+      max-width:700px;
+      background:#fff;
+      border-radius:15px;
+      padding:25px;
+      max-height:90vh;
+      overflow-y:auto;
+      box-shadow:0 20px 50px rgba(0,0,0,.25);
+      animation:popup .2s ease;
+      }
+      @keyframes popup{
+      from{opacity:0;transform:translateY(-20px)}
+      to{opacity:1;transform:translateY(0)}
+      }
+      .modal-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+      }
+      .close-modal{
+      border:none;
+      background:none;
+      font-size:30px;
+      cursor:pointer;
+      }
+      .form-group{margin-bottom:15px}
+      .form-group label{display:block;margin-bottom:5px;font-weight:600}
+      .form-group input,.form-group select,.form-group textarea{
+      width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px
+      }
+      .submit-btn{
+      width:100%;padding:12px;border:none;border-radius:8px;
+      background:#2563eb;color:#fff;cursor:pointer
+      }
+      @media(max-width:768px){
+      .wrapper{flex-direction:column}
+      .sidebar{width:100%}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="sidebar">
+        <div class="logo">File Tracking</div>
+        <ul class="menu">
+          <li><a href="#" class="active-menu">Dashboard</a></li>
+          <li><a href="#">Reports</a></li>
+          <li><a href="#">Logout</a></li>
+        </ul>
+      </div>
+
+      <div class="main">
+        <div class="topbar">
+          <h1>Admin Dashboard</h1>
+          <div>Welcome, Super User</div>
+        </div>
+
+        <div class="card-grid">
+          <div class="card">
+            <h3>👤 User Management</h3>
+            <p>Create users, assign roles and manage access.</p>
+            <button class="btn" onclick="openUserModal()">Open App</button>
+          </div>
+
+          <div class="card">
+            <h3>📁 File Master</h3>
+            <p>Add and maintain file numbers and file names.</p>
+            <button class="btn" onclick="openFileModal()">Open App</button>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card">
+            <div>Total Users</div>
+            <h2>45</h2>
+          </div>
+          <div class="stat-card">
+            <div>Active Users</div>
+            <h2>38</h2>
+          </div>
+          <div class="stat-card">
+            <div>Total Files</div>
+            <h2>1256</h2>
+          </div>
+          <div class="stat-card">
+            <div>Open Files</div>
+            <h2>245</h2>
+          </div>
+        </div>
+
+        <div class="activities">
+          <h3>Recent Activities</h3>
+          <ul>
+            <li>Created user ACCOUNTS01</li>
+            <li>Added file ACC-01 Salary</li>
+            <li>Updated FR-2026-145</li>
+            <li>Reset password for USER02</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-card" id="modalCard"></div>
+    </div>
+
+    <script>
+      function openUserModal() {
+        document.getElementById("modalCard").innerHTML = `
+<div class="modal-header">
+<h2>Create New User</h2>
+<button class="close-modal" onclick="closeModal()">×</button>
+</div>
+
+<div class="form-group">
+<label>Username</label>
+<input type="text">
+</div>
+
+<div class="form-group">
+<label>Password</label>
+<input type="password">
+</div>
+
+<div class="form-group">
+<label>Role</label>
+<select>
+<option>User</option>
+<option>Admin</option>
+<option>Super User</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Section</label>
+<select>
+<option>Accounts</option>
+<option>Administration</option>
+<option>Establishment</option>
+</select>
+</div>
+
+<button class="submit-btn">Create User</button>
+`;
+
+        document.getElementById("modalOverlay").style.display = "flex";
+      }
+
+      function openFileModal() {
+        document.getElementById("modalCard").innerHTML = `
+<div class="modal-header">
+<h2>Enter File Number & Name</h2>
+<button class="close-modal" onclick="closeModal()">×</button>
+</div>
+
+<div class="form-group">
+<label>File Number</label>
+<input type="text">
+</div>
+
+<div class="form-group">
+<label>File Name</label>
+<input type="text">
+</div>
+
+<div class="form-group">
+<label>Section</label>
+<select>
+<option>Accounts</option>
+<option>Administration</option>
+<option>Establishment</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Description</label>
+<textarea rows="4"></textarea>
+</div>
+
+<button class="submit-btn">Save File</button>
+`;
+
+        document.getElementById("modalOverlay").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("modalOverlay").style.display = "none";
+      }
+
+      document
+        .getElementById("modalOverlay")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            closeModal();
+          }
+        });
+    </script>
+  </body>
+</html>
