@@ -415,7 +415,7 @@ document
     );
 
 });
-}
+}); 
 
 // When user clicks Put Up, the object becomes:
 
