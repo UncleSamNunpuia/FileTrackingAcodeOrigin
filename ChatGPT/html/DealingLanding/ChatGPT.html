@@ -6,7 +6,7 @@
     <title>ChatGPT|File Tracking System</title>
     <link
       rel="stylesheet"
-      href="../../css/DealingLanding/ChatGPTDEalingLAnding.css"
+      href="../../css/DealingLanding/ChatGPTDealingLanding.css"
     />
     <script
       src="../../js/DealingLanding/ChatGPTDealingLanding.js"
@@ -105,11 +105,35 @@
         <div class="accordion-item">
           <div class="accordion-header" id="actionHeader">Select Action</div>
           <div class="accordion-content" id="actionAccordion">
-            <div class="action-option" data-value="For Info">For Info</div>
-            <div class="action-option" data-value="S.O DFA">S.O DFA</div>
-            <div class="action-option" data-value="W.O DFA">W.O DFA</div>
+            <div
+              class="action-option"
+              data-value="For Info"
+              style="padding: 10px"
+            >
+              For Info
+            </div>
+            <div
+              class="action-option"
+              data-value="S.O DFA"
+              style="padding: 10px"
+            >
+              S.O DFA
+            </div>
+            <div
+              class="action-option"
+              data-value="W.O DFA"
+              style="padding: 10px"
+            >
+              W.O DFA
+            </div>
             <div style="padding: 10px">
-              <input type="text" id="customAction" placeholder="Other Action" />
+              <input
+                type="text"
+                class="action-option"
+                id="customAction"
+                placeholder="Other Action"
+                data-value="Other Action user input"
+              />
             </div>
           </div>
         </div>

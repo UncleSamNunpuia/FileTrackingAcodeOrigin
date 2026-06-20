@@ -136,12 +136,17 @@ button:hover{
 }
 
 .action-option.active{
-    background:#2563eb;
-    color:white;
+    /* background:#2563eb; */
+    background:#eff6ff;
+    /* color:white; */
+    color:#1e40af;
     font-weight:700;
-    border-left:6px solid #1e40af;
+    border-left:6px solid #bfdbfe;
+    /* border-left:6px solid #1e40af; */
     box-shadow:
-        inset 0 0 0 2px #1e40af;
+        inset 0 0 0 2px #bfdbfe;
+    /* box-shadow:
+        inset 0 0 0 2px #1e40af; */
 
 }
 

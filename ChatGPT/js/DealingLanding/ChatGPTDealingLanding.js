@@ -274,25 +274,6 @@ document
 .querySelectorAll(".action-option")
 .forEach(option => {
 
-    // option.onclick = () => {
-
-    //     document
-    //     .querySelectorAll(".action-option")
-    //     .forEach(x =>
-    //         x.classList.remove("active")
-    //     );
-
-    //     option.classList.add("active");
-
-    //     document
-    //     .getElementById("selectedAction")
-    //     .value =
-    //         option.dataset.value;
-
-    //     actionHeader.textContent =
-    //         option.dataset.value;
-    // };
-
     option.onclick = () => {
 
     document
