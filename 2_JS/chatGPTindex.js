@@ -128,22 +128,23 @@ function login(event){
         case "SUPER":
 
             window.location.href =
-                "super-dashboard.html";
+                "../ChatGPT/html/AdminLanding/ChatGPTAdminLanding.html";
+                // "super-dashboard.html";
 
             break;
 
         case "ADMIN":
 
             window.location.href =
-                "admin-dashboard.html";
+                "../ChatGPT/html/AdminLanding/ChatGPTAdminLanding.html";
 
             break;
 
         case "USER":
 
             window.location.href =
-                "file-tracking.html";
-
+                "../ChatGPT/html/DealingLanding/ChatGPTDealingLanding.html";
+                // "file-tracking.html";
             break;
     }
 }
