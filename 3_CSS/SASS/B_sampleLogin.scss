@@ -1,0 +1,52 @@
+$bg-color: #f8f9fa;
+$card-bg: #ffffff;
+$shadow-color: rgba(33, 33, 33, 0.1);;
+$border-radius: 10px;
+$border-color: #a1c8f0;
+$form-lable-color: #094477;
+
+body {
+  background-color: $bg-color;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px;
+    background: $card-bg;
+    padding: 30px;
+    border-radius: $border-radius;
+    border: 1px solid $border-color;
+    box-shadow: 0 0 5px rgba(33, 33, 33, 0.1);
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+    }
+    
+    h3 {
+    text-align: center;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    #message {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .form-control {
+    border-color: $border-color;
+
+    &:focus {
+      border-color: $border-color;
+      box-shadow: 0 0 5px rgba(13, 110, 253, 0.25);
+    }
+  }
+
+  .form-floating > label {
+    color: $form-lable-color;
+  }
+}
+
