@@ -65,32 +65,32 @@ document
         // role based redirection
         setTimeout(() => {
 
-  switch (result.role.toLowerCase()) {
-
-    case "superadmin":
-      window.location.href =
-        "../1_html/B_superadmin_dashboard.html";
-      break;
-
-    case "admin":
-      window.location.href =
-        "../1_html/B_admin_dashboard.html";
-      break;
-
-    case "normal":
-      window.location.href =
-        "../1_html/B_normal_dashboard.html";
-      break;
-
-    default:
-      console.error("Unknown role:", result.role);
-
-      messageDiv.innerHTML =
-        "<span class='text-danger'>Unknown user role.</span>";
-  }
-
-}, 1000);
-        
+      switch (result.role.toLowerCase()) {
+    
+        case "superadmin":
+          window.location.href =
+            "../1_html/B_superadmin_dashboard.html";
+          break;
+    
+        case "admin":
+          window.location.href =
+            "../1_html/B_admin_dashboard.html";
+          break;
+    
+        case "normal":
+          window.location.href =
+            "../1_html/B_normal_dashboard.html";
+          break;
+    
+        default:
+          console.error("Unknown role:", result.role);
+    
+          messageDiv.innerHTML =
+            "<span class='text-danger'>Unknown user role.</span>";
+      }
+    
+    }, 1000);
+            
       } else {
         messageDiv.innerHTML =
           "<span class='text-danger'>Invalid Username or Password</span>";
