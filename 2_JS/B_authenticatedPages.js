@@ -39,8 +39,6 @@ if (logoutBtn) {
 document.getElementById("logoutBtn").addEventListener("click", () => {alert('logout clicked')});
 // document.getElementById("logoutBtn").addEventListener("click", logout);
 
-
-
 async function logout() {
 
   if (!confirm("Are you sure you want to logout?")) {
