@@ -47,12 +47,12 @@ console.log("Token:", token);
   if (!confirm("Are you sure you want to logout?")) {
     return;
   }
-  const token = sessionStorage.getItem("auth_token");
+  const currentToken = sessionStorage.getItem("auth_token");
 
   try {
     const body = new URLSearchParams({
       action: "logout",
-      token: token
+      token: currentToken
     });
 
     const response = await fetch(GAS_URL, {
