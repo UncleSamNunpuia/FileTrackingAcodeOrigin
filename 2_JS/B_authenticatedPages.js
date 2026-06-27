@@ -31,3 +31,62 @@
     // window.location.href = "login.html";
   }
 })();
+
+const GAS_URL =
+  "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
+
+document
+  .getElementById("logoutBtn")
+  .addEventListener("click", logout);
+
+async function logout() {
+
+  if (!confirm("Are you sure you want to logout?")) {
+    return;
+  }
+
+  const token = sessionStorage.getItem("auth_token");
+
+  try {
+
+    const body = new URLSearchParams({
+
+      action: "logout",
+
+      token: token
+
+    });
+
+    const response = await fetch(GAS_URL, {
+
+      method: "POST",
+
+      body: body
+
+    });
+
+    const result = await response.json();
+
+    console.log(result);
+
+  }
+  catch (err) {
+
+    console.error("Logout Error:", err);
+
+  }
+  finally {
+
+    // Remove only these keys
+
+    sessionStorage.removeItem("auth_token");
+
+    sessionStorage.removeItem("username");
+
+    sessionStorage.removeItem("role");
+
+    window.location.replace("../index.html");
+
+  }
+
+}
