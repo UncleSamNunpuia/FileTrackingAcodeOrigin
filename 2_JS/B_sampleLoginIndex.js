@@ -78,7 +78,7 @@ document
         
             case "normal":
               window.location.href =
-                "../1_html/B_2normal_dashboard.html";
+                "../1_html/B_3normal_dashboard.html";
               break;
         
             default:
