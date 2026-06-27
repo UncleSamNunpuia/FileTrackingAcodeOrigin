@@ -83,7 +83,6 @@ document
         
             default:
               console.error("Unknown role:", result.role);
-        
               messageDiv.innerHTML =
                 "<span class='text-danger'>Unknown user role.</span>";
           }
