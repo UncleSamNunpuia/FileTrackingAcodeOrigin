@@ -41,7 +41,7 @@ async function logout() {
 
 console.log("Logout clicked");
 
-const token = sessionStorage.getItem("auth_token");
+// const token = sessionStorage.getItem("auth_token");
 console.log("Token:", token);
   
   if (!confirm("Are you sure you want to logout?")) {
