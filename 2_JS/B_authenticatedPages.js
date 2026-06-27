@@ -65,7 +65,6 @@ async function logout() {
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("role");
     window.location.replace("../index.html");
-
   }
 
 }
