@@ -87,7 +87,6 @@ document
               messageDiv.innerHTML =
                 "<span class='text-danger'>Unknown user role.</span>";
           }
-        
         }, 1000);
             
       } else {
