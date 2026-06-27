@@ -68,17 +68,17 @@ document
           switch (result.role.toLowerCase()) {
             case "superadmin":
               window.location.href =
-                "../1_html/B_superadmin_dashboard.html";
+                "../1_html/B_1superadmin_dashboard.html";
               break;
         
             case "admin":
               window.location.href =
-                "../1_html/B_admin_dashboard.html";
+                "../1_html/B_2admin_dashboard.html";
               break;
         
             case "normal":
               window.location.href =
-                "../1_html/B_normal_dashboard.html";
+                "../1_html/B_2normal_dashboard.html";
               break;
         
             default:
