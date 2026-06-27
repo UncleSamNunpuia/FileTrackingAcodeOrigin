@@ -42,43 +42,28 @@ async function logout() {
   const token = sessionStorage.getItem("auth_token");
 
   try {
-
     const body = new URLSearchParams({
-
       action: "logout",
-
       token: token
-
     });
 
     const response = await fetch(GAS_URL, {
-
       method: "POST",
-
       body: body
-
     });
 
     const result = await response.json();
-
     console.log(result);
-
   }
   catch (err) {
-
     console.error("Logout Error:", err);
-
   }
   finally {
 
     // Remove only these keys
-
     sessionStorage.removeItem("auth_token");
-
     sessionStorage.removeItem("username");
-
     sessionStorage.removeItem("role");
-
     window.location.replace("../index.html");
 
   }
