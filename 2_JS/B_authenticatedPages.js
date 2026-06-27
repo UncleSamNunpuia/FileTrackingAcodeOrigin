@@ -31,7 +31,7 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoRO
   }
 })();
 
-document.getElementById("logoutBtn").addEventListener("click", alert('logout clicked'));
+document.getElementById("logoutBtn").addEventListener("click", () => {alert('logout clicked')});
 // document.getElementById("logoutBtn").addEventListener("click", logout);
 
 
