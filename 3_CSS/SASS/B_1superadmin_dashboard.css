@@ -30,7 +30,7 @@
   z-index: 1;
 }
 
-.modal-overlay, .app-tile .lock-badge, .app-tile .tile-action, .section-hd {
+.modal-header, .modal-overlay, .app-tile .lock-badge, .app-tile .tile-action, .section-hd {
   display: flex;
   align-items: center;
 }
@@ -307,7 +307,7 @@
 /*==================================================
   BUTTONS
 ==================================================*/
-.btn {
+.btn, .submit-btn {
   border: none;
   padding: 10px 18px;
   border-radius: 8px;
@@ -316,9 +316,69 @@
   color: #fff;
   transition: background 0.18s, transform 0.15s;
 }
-.btn:hover {
+.btn:hover, .submit-btn:hover {
   background: #1d4ed8;
 }
-.btn:active {
+.btn:active, .submit-btn:active {
   transform: translateY(1px);
+}
+
+/*==================================================
+  MODAL HEADER
+==================================================*/
+.modal-header {
+  gap: 0;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.close-modal {
+  border: none;
+  background: none;
+  font-size: 30px;
+  cursor: pointer;
+  transition: color 0.18s;
+}
+.close-modal:hover {
+  color: var(--red);
+}
+
+/*==================================================
+  FORM
+==================================================*/
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  font: inherit;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--indigo);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/*==================================================
+  SUBMIT BUTTON
+==================================================*/
+.submit-btn {
+  width: 100%;
 }/*# sourceMappingURL=B_1superadmin_dashboard.css.map */
