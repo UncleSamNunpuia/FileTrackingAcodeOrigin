@@ -1,0 +1,7 @@
+How to clone from existing online repo to local and update the local to match the onlne.
+iopen vscode in new ctrl+shft + N
+goto explorere on the right hand
+clone repository
+choose the repo
+goto source control
+then commit the changes that are appearing there, so that the updated online repor files are now reflected to the local files
