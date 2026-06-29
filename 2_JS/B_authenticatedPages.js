@@ -37,6 +37,7 @@ if (logoutBtn) {
     logoutBtn.addEventListener("click", logout);
 }
 
+// LogOutFuntion
 async function logout() {
 
 console.log("Logout clicked");
