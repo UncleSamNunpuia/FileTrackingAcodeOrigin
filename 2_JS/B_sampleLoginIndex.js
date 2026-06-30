@@ -26,6 +26,7 @@ document
       // Sending JSON caused a CORS redirect failure — GAS POST requests
       // trigger a 302 redirect that fetch (in CORS mode) can't follow with a body,
       // so the request arrived empty and GAS threw an error, landing in catch.
+      //  We use URLSearchParams as we send simple text and not form data.
       const body = new URLSearchParams({
         action: "login",
         username: username,
