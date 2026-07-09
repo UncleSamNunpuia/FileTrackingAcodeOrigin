@@ -86,18 +86,11 @@ function openFileModal() {
         document.getElementById("modalOverlay").style.display = "flex";
       }
 
-      function closeModal() {
-        document.getElementById("modalOverlay").style.display = "none";
-      }
-
-      document
-        .getElementById("modalOverlay")
-        .addEventListener("click", function (e) {
-          if (e.target === this) {
-            closeModal();
-          }
-        });
-
+// clsoe modal function
+function closeModal() {
+    console.trace("closeModal called");
+    document.getElementById("modalOverlay").style.display = "none";
+}
 
 //  funtion to handle submitted data of create user
 function submitUser() {
@@ -132,18 +125,19 @@ function submitUser() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Response:", data);
+        console.log("Response (B_1superadmin_dashboar.js):", data);
 
         if (data.success) {
             alert(data.message);
-            showSuccessModal(data.message); // Show Success modal
+            let title = "User Created Successfully";
+            showSuccessModal(title, data.message); // Show Success modal
         } else {
-            alert("Error: " + data.message);
+            alert("Error (B_1superadmin_dashboar.js): " + data.message);
         }
     })
     .catch(error => {
         console.error("Error:", error);
-        alert("Failed to connect to the server.");
+        alert("Failed to connect to the server. (B_1superadmin_dashboar.js)");
     });
 }
 // submit create user ends here
@@ -183,28 +177,25 @@ function submitFile() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Response:", data);
+        console.log("Response (B_1superadmin_dashboar.js):", data);
 
         if (data.success) {
             alert(data.message);
-            showSuccessModal(data.message);
+            let title = "File Created Successfully";
+            showSuccessModal(title, data.message);
         } else {
-            alert("Error: " + data.message);
+            alert("Error (B_1superadmin_dashboar.js): " + data.message);
         }
     })
     .catch(error => {
         console.error("Error:", error);
-        alert("Failed to connect to the server.");
+        alert("Failed to connect to the server. (B_1superadmin_dashboar.js)");
     });
 }
 // submit file create ends here
 
-    // function showSuccessModal(message) {
-    //     document.getElementById("successMessage").textContent = message;
-    //     document.getElementById("successModal").style.display = "flex";
-    // }
-
-    function showSuccessModal(message) {
+// show success modal
+function showSuccessModal(title, message) {
 
     document.getElementById("modalCard").innerHTML = `
         <div class="modal-header">
@@ -227,7 +218,7 @@ function submitFile() {
                 ✓
             </div>
 
-            <h3>User Created Successfully</h3>
+            <h3>${title}</h3>
 
             <p>${message}</p>
 
@@ -237,10 +228,10 @@ function submitFile() {
 
         </div>
     `;
-
     document.getElementById("modalOverlay").style.display = "flex";
 }
+// show success modal ends here
 
-    function closeSuccessModal() {
-        document.getElementById("modalOverlay").style.display = "none";
-    }
+function closeSuccessModal() {
+    document.getElementById("modalOverlay").style.display = "none";
+}
