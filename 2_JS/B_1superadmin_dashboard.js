@@ -33,6 +33,7 @@ function openUserModal() {
         <option>Accounts</option>
         <option>Administration</option>
         <option>Establishment</option>
+        // this part maybe modified to fetch from database
     </select>
 </div>
 
@@ -43,40 +44,44 @@ function openUserModal() {
 
         document.getElementById("modalOverlay").style.display = "flex";
       }
+// ends create user modal
 
 // open file modal
 function openFileModal() {
   document.getElementById("modalCard").innerHTML = `
 <div class="modal-header">
-<h2>Enter File Number & Name</h2>
-<button class="close-modal" onclick="closeModal()">×</button>
+    <h2>Enter File Number & Name</h2>
+    <button class="close-modal" onclick="closeModal()">×</button>
 </div>
 
 <div class="form-group">
-<label>File Number</label>
-<input type="text">
+    <label for="fileNumber">File Number</label>
+    <input type="text" id="fileNumber">
 </div>
 
 <div class="form-group">
-<label>File Name</label>
-<input type="text">
+    <label for="fileName">File Name</label>
+    <input type="text" id="fileName">
 </div>
 
 <div class="form-group">
-<label>Section</label>
-<select>
-<option>Accounts</option>
-<option>Administration</option>
-<option>Establishment</option>
-</select>
+    <label for="fileSectionLabel">Section</label>
+    <select id="fileSection">
+        <option>Accounts</option>
+        <option>Administration</option>
+        <option>Establishment</option>
+        // This part maybe modified to fetch from database
+    </select>
 </div>
 
 <div class="form-group">
-<label>Description</label>
-<textarea rows="4"></textarea>
+    <label for="fileDescription">Description</label>
+    <textarea id="fileDescription" rows="4"></textarea>
 </div>
 
-<button class="submit-btn">Save File</button>
+<button class="submit-btn" onclick="submitFile()">
+    Create File
+</button>
 `;
         document.getElementById("modalOverlay").style.display = "flex";
       }
@@ -94,53 +99,105 @@ function openFileModal() {
         });
 
 
-        //  funtion to handle submitted data of create user
-    function submitUser() {
+//  funtion to handle submitted data of create user
+function submitUser() {
+// Get values from the modal
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const role = document.getElementById("role").value;
+    const section = document.getElementById("section").value;
+
+    // Print to the browser console
+    console.log("===== Create User =====");
+    console.log("Username:", username);
+    console.log("Password:", password);
+    console.log("Role:", role);
+    console.log("Section:", section);
+    console.log("=======================");
+
+    // Create FormData
+    const formData = new FormData();
+    formData.append("action", "createUser");
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("role", role);
+    formData.append("section", section);
+
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
+    // Send to GAS: we do not use URLSearchParams here because we are sending formData,
+    //  so we need to use FormData
+    fetch(GAS_URL, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Response:", data);
+
+        if (data.success) {
+            alert(data.message);
+            showSuccessModal(data.message); // Show Success modal
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Failed to connect to the server.");
+    });
+}
+// submit create user ends here
+
+
+// Function to handle submitted data of Create File
+function submitFile() {
+
     // Get values from the modal
-        const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value;
-        const role = document.getElementById("role").value;
-        const section = document.getElementById("section").value;
+    const fileNumber = document.getElementById("fileNumber").value.trim();
+    const fileName = document.getElementById("fileName").value.trim();
+    const section = document.getElementById("fileSection").value;
+    const description = document.getElementById("fileDescription").value.trim();
 
-        // Print to the browser console
-        console.log("===== Create User =====");
-        console.log("Username:", username);
-        console.log("Password:", password);
-        console.log("Role:", role);
-        console.log("Section:", section);
-        console.log("=======================");
+    // Print to the browser console
+    console.log("===== Create File =====");
+    console.log("File Number:", fileNumber);
+    console.log("File Name:", fileName);
+    console.log("Section:", section);
+    console.log("Description:", description);
+    console.log("=======================");
 
-        // Create FormData
-        const formData = new FormData();
-        formData.append("action", "createUser");
-        formData.append("username", username);
-        formData.append("password", password);
-        formData.append("role", role);
-        formData.append("section", section);
+    // Create FormData
+    const formData = new FormData();
+    formData.append("action", "createFile");
+    formData.append("fileNumber", fileNumber);
+    formData.append("fileName", fileName);
+    formData.append("section", section);
+    formData.append("description", description);
 
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
-        // Send to GAS: we do not use URLSearchParams here because we are sending formData,
-        //  so we need to use FormData
-        fetch(GAS_URL, {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Response:", data);
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
 
-            if (data.success) {
-                alert(data.message);
-                showSuccessModal(data.message); // Show Success modal
-            } else {
-                alert("Error: " + data.message);
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("Failed to connect to the server.");
-        });
-    }
+    // Send to Google Apps Script
+    fetch(GAS_URL, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Response:", data);
+
+        if (data.success) {
+            alert(data.message);
+            showSuccessModal(data.message);
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Failed to connect to the server.");
+    });
+}
+// submit file create ends here
 
     // function showSuccessModal(message) {
     //     document.getElementById("successMessage").textContent = message;

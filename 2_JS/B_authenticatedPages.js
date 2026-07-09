@@ -66,7 +66,6 @@ console.log("Token:", token);
     console.error("Logout Error:", err);
   }
   finally {
-
     // Remove only these keys
     sessionStorage.removeItem("auth_token");
     sessionStorage.removeItem("username");
