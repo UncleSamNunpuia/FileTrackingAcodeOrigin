@@ -42,10 +42,8 @@
             class="app-tile indigo"
             id="tile-user"
             tabindex="0"
-            onclick="openUserModal()"
+            onclick="openModal('createUser')"
           >
-            <!-- onkeydown="if (event.key === 'Enter') launchApp('user');" -->
-            <!-- onclick="launchApp('user')" -->
             <div class="tile-icon-wrap">
               <svg
                 width="26"
@@ -88,11 +86,8 @@
             class="app-tile teal"
             id="tile-file"
             tabindex="0"
-            onclick="openFileModal()"
+            onclick="openModal('createFile')"
           >
-            <!-- onclick="openFileModal()" -->
-            <!-- onclick="launchApp('file')" -->
-            <!-- onkeydown="if (event.key === 'Enter') launchApp('file');" -->
             <div class="tile-icon-wrap">
               <svg
                 width="26"
@@ -148,5 +143,4 @@
       crossorigin="anonymous"
     ></script>
   </body>
-  
 </html>
