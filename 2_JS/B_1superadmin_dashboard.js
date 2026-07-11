@@ -148,20 +148,6 @@ function closeSuccessModal() {
 
 //  funtion to handle submitted data of create user
 function submitUser() {
-// Get values from the modal
-    // const username = document.getElementById("username").value.trim();
-    // const password = document.getElementById("password").value;
-    // const role = document.getElementById("role").value;
-    // const section = document.getElementById("section").value;
-
-    // Print to the browser console
-    console.log("===== Create User =====");
-    console.log("Username:", username);
-    console.log("Password:", password);
-    console.log("Role:", role);
-    console.log("Section:", section);
-    console.log("=======================");
-
     // Create FormData
     submitForm({
             action:"createUser",
@@ -174,59 +160,10 @@ function submitUser() {
             successTitle: "User Created Successfully"
         });
 };
-
-// {
-// function submitUser() {
-// // Get values from the modal
-//     const username = document.getElementById("username").value.trim();
-//     const password = document.getElementById("password").value;
-//     const role = document.getElementById("role").value;
-//     const section = document.getElementById("section").value;
-
-//     // Print to the browser console
-//     console.log("===== Create User =====");
-//     console.log("Username:", username);
-//     console.log("Password:", password);
-//     console.log("Role:", role);
-//     console.log("Section:", section);
-//     console.log("=======================");
-
-//     // Create FormData
-//     const formData = createFormData({
-//         action: "createUser",
-//         username,
-//         password,
-//         role,
-//         section
-
-//     });
-
-    // call SendToGAS fn
-    // if we increase the number of parameters in the sendToGAS function, we can use object destructuring to pass them as an object instead of individual parameters.
-//     sendToGAS({ formData, successTitle: "User Created Successfully"});
-
-// }
 // submit create user ends here
-// }
-
 
 // Function to handle submitted data of Create File
 function submitFile() {
-
-    // Get values from the modal
-    // const fileNumber = document.getElementById("fileNumber").value.trim();
-    // const fileName = document.getElementById("fileName").value.trim();
-    // const section = document.getElementById("fileSection").value;
-    // const description = document.getElementById("fileDescription").value.trim();
-
-    // Print to the browser console
-    // console.log("===== Create File =====");
-    // console.log("File Number:", fileNumber);
-    // console.log("File Name:", fileName);
-    // console.log("Section:", section);
-    // console.log("Description:", description);
-    // console.log("=======================");
-
     // Create FormData
     submitForm({
         action: "createFile",
@@ -238,73 +175,21 @@ function submitFile() {
             "fileSection",
             "fileDescription"
         ],
-        // fields:{
-        //     fileNumber:"fileNumber",
-        //     fileName:"fileName",
-        //     fileSection:"section",
-        //     fileDescription:"description"
-        // },
         successTitle: "File Created Successfully"
     });
-
-     // call Send to GAS fn
-    // if we increase the number of parameters in the sendToGAS function, we can use object destructuring to pass them as an object instead of individual parameters.
-    // sendToGAS({ formData, successTitle: "File Created Successfully"});
 }
 // submit file create ends here
 
-// {
-// // Function to handle submitted data of Create File
-// function submitFile() {
-
-//     // Get values from the modal
-//     const fileNumber = document.getElementById("fileNumber").value.trim();
-//     const fileName = document.getElementById("fileName").value.trim();
-//     const section = document.getElementById("fileSection").value;
-//     const description = document.getElementById("fileDescription").value.trim();
-
-//     // Print to the browser console
-//     console.log("===== Create File =====");
-//     console.log("File Number:", fileNumber);
-//     console.log("File Name:", fileName);
-//     console.log("Section:", section);
-//     console.log("Description:", description);
-//     console.log("=======================");
-
-//     // Create FormData
-//     const formData = createFormData({
-//         action: "createFile",
-//         fileNumber,
-//         fileName,
-//         section,
-//         description
-//     });
-
-//      // call Send to GAS fn
-//     // if we increase the number of parameters in the sendToGAS function, we can use object destructuring to pass them as an object instead of individual parameters.
-//     sendToGAS({ formData, successTitle: "File Created Successfully"});
-// }
-// // submit file create ends here
-// }
-
-// generic submit form data
-
 function submitForm(config) {
-
     // only action parameter of the config (submitForm() is assigned to data object,
     //  the rest of the parameters are assigned to data object in the forEach loop below.
     const data = { action: config.action};
-
     config.fields.forEach(id => { data[id] = document.getElementById(id).value.trim();});
-
     const formData = createFormData(data);
-
     console.log(formData)
-
     sendToGAS({ formData, successTitle:config.successTitle});
 
-}
-// generic submit form data ends
+} // generic submit form data ends
 
 // funtion to create Form data
 function createFormData(data) {
@@ -313,13 +198,11 @@ function createFormData(data) {
         formData.append(key, value);
     });
     return formData;
-}
-// create Form data ends
+} // create Form data ends
 
 // send to GAS fn
 // function sendToGAS(formData, title) {
 function sendToGAS(config) {
-
     // object destructuring (or destructuring assignment) in JS (intro in ES6).
     // Extracts properties from an object into variables with the same names.
     // if the parameter passed is increased the variable names can be increased in the destructuring assignment.
@@ -345,6 +228,4 @@ function sendToGAS(config) {
         console.error("Error:", error);
         alert("Failed to connect to the server.");
     });
-}
-// send to GAS fn ends here
-
+} // send to GAS fn ends here
