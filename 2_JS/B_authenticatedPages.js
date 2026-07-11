@@ -1,5 +1,7 @@
 // ver 3 - logout button implemented
-const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
+// GAS_URL is already defined in the B_1superadmin_dashboard.js file, 
+// so we don't need to redefine it here. We can just use it directly.
+// const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
 const token = sessionStorage.getItem("auth_token");
 // auth-check.js — include on every protected page (no changes needed here)
 (async function () {
