@@ -118,7 +118,7 @@ function openModal(type, title = "", message = "") {
     modalOverlay.style.display = "flex";
 }
 // openModal function to handle both user and file modals ends
-
+// to be deleted this line for sample branc
 // close modal function X button
 function closeModal() {
     console.trace("closeModal called");
