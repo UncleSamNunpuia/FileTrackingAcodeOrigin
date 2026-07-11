@@ -186,6 +186,9 @@ function submitForm(config) {
     const data = { action: config.action};
     config.fields.forEach(id => { data[id] = document.getElementById(id).value.trim();});
     const formData = createFormData(data);
+
+    
+
     console.log(formData)
     sendToGAS({ formData, successTitle:config.successTitle});
 
