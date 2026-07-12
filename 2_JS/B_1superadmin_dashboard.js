@@ -48,40 +48,114 @@ function getUserModalHTML() {
     }
 // fn to createUser Modal html ends
 
+function getFileModalHTML(config = {}) {
+
+    const {
+        title = "Enter File Number & Name",
+        fileNumber = "",
+        fileName = "",
+        fileSection = "Accounts",
+        fileDescription = "",
+        confirmMode = false
+    } = config;
+  return `
+<div class="modal-header">
+    <h2>${title}</h2>
+    <button class="close-modal" onclick="closeModal()">×</button>
+</div>
+
+<div class="form-group">
+    <label>File Number</label>
+    <input
+        type="text"
+        id="fileNumber"
+        value="${fileNumber}"
+        ${confirmMode ? "disabled" : ""}>
+</div>
+
+<div class="form-group">
+    <label>File Name</label>
+    <input
+        type="text"
+        id="fileName"
+        value="${fileName}"
+        ${confirmMode ? "disabled" : ""}>
+</div>
+
+<div class="form-group">
+    <label>Section</label>
+
+    <select id="fileSection" ${confirmMode ? "disabled" : ""}>
+        <option ${fileSection==="Accounts"?"selected":""}>Accounts</option>
+        <option ${fileSection==="Administration"?"selected":""}>Administration</option>
+        <option ${fileSection==="Establishment"?"selected":""}>Establishment</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label>Description</label>
+
+    <textarea
+        id="fileDescription"
+        rows="4"
+        ${confirmMode ? "disabled" : ""}>${fileDescription}</textarea>
+</div>
+
+${
+confirmMode
+?
+`
+<button class="submit-btn" onclick="confirmSubmitFile()">
+Confirm
+</button>
+
+<button class="submit-btn" onclick="editFile()">
+Edit
+</button>
+`
+:
+`
+<button class="submit-btn" onclick="submitFile()">
+Create File
+</button>
+`}
+`;
 // fn to createFile Modal html
-function getFileModalHTML() {
-    return `
-        <div class="modal-header">
-            <h2>Enter File Number & Name</h2>
-            <button class="close-modal" onclick="closeModal()">×</button>
-        </div>
-        <div class="form-group">
-            <label for="fileNumber">File Number</label>
-            <input type="text" id="fileNumber">
-        </div>
-        <div class="form-group">
-            <label for="fileName">File Name</label>
-            <input type="text" id="fileName">
-        </div>
-        <div class="form-group">
-            <label for="fileSectionLabel">Section</label>
-            <select id="fileSection">
-                <option>Accounts</option>
-                <option>Administration</option>
-                <option>Establishment</option>
-                // This part maybe modified to fetch from database
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="fileDescription">Description</label>
-            <textarea id="fileDescription" rows="4"></textarea>
-        </div>
-        <button class="submit-btn" onclick="submitFile()">
-            Create File
-        </button>
-        `;
-    }
 // fn to createFile Modal html ends
+// // fn to createFile Modal html
+// function getFileModalHTML() {
+//     return `
+//         <div class="modal-header">
+//             <h2>Enter File Number & Name</h2>
+//             <button class="close-modal" onclick="closeModal()">×</button>
+//         </div>
+//         <div class="form-group">
+//             <label for="fileNumber">File Number</label>
+//             <input type="text" id="fileNumber">
+//         </div>
+//         <div class="form-group">
+//             <label for="fileName">File Name</label>
+//             <input type="text" id="fileName">
+//         </div>
+//         <div class="form-group">
+//             <label for="fileSectionLabel">Section</label>
+//             <select id="fileSection">
+//                 <option>Accounts</option>
+//                 <option>Administration</option>
+//                 <option>Establishment</option>
+//                 // This part maybe modified to fetch from database
+//             </select>
+//         </div>
+//         <div class="form-group">
+//             <label for="fileDescription">Description</label>
+//             <textarea id="fileDescription" rows="4"></textarea>
+//         </div>
+//         <button class="submit-btn" onclick="submitFile()">
+//             Create File
+//         </button>
+//         `;
+//     }
+// // fn to createFile Modal html ends
 
 // show success modal
 function showSuccessModalHTML(title, message) {
@@ -164,21 +238,48 @@ function submitUser() {
 
 // Function to handle submitted data of Create File
 function submitFile() {
-    // Create FormData
-    submitForm({
-        action: "createFile",
-        // here <html id> : <what GAS expects> mapping is done, 
-        // so that the GAS can understand the data sent from the front end.
-        fields:[
-            "fileNumber",
-            "fileName",
-            "fileSection",
-            "fileDescription"
-        ],
-        successTitle: "File Created Successfully"
+
+    window.pendingFileData = {
+
+        fileNumber: document.getElementById("fileNumber").value.trim(),
+
+        fileName: document.getElementById("fileName").value.trim(),
+
+        fileSection: document.getElementById("fileSection").value,
+
+        fileDescription: document.getElementById("fileDescription").value.trim()
+
+    };
+
+    modalCard.innerHTML = getFileModalHTML({
+
+        ...window.pendingFileData,
+
+        title: "Confirm File Details",
+
+        confirmMode: true
+
     });
+
 }
 // submit file create ends here
+// // Function to handle submitted data of Create File
+// function submitFile() {
+//     // Create FormData
+//     submitForm({
+//         action: "createFile",
+//         // here <html id> : <what GAS expects> mapping is done, 
+//         // so that the GAS can understand the data sent from the front end.
+//         fields:[
+//             "fileNumber",
+//             "fileName",
+//             "fileSection",
+//             "fileDescription"
+//         ],
+//         successTitle: "File Created Successfully"
+//     });
+// }
+// // submit file create ends here
 
 function submitForm(config) {
     // only action parameter of the config (submitForm() is assigned to data object,
