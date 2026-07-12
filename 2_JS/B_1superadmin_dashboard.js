@@ -241,13 +241,13 @@ function submitFile() {
 
     window.pendingFileData = {
 
-        fileNumber: document.getElementById("fileNumber").value.trim(),
+    fileNumber:document.getElementById("fileNumber").value.trim(),
 
-        fileName: document.getElementById("fileName").value.trim(),
+    fileName: document.getElementById("fileName").value.trim(),
 
-        fileSection: document.getElementById("fileSection").value,
+    fileSection: document.getElementById("fileSection").value,
 
-        fileDescription: document.getElementById("fileDescription").value.trim()
+    fileDescription:document.getElementById("fileDescription").value.trim()
 
     };
 
