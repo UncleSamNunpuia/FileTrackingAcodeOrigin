@@ -242,27 +242,42 @@ function submitFile() {
     window.pendingFileData = {
 
     fileNumber:document.getElementById("fileNumber").value.trim(),
-
     fileName: document.getElementById("fileName").value.trim(),
-
     fileSection: document.getElementById("fileSection").value,
-
-    fileDescription:document.getElementById("fileDescription").value.trim()
-
+    fileDescription: document.getElementById("fileDescription").value.trim()
     };
 
     modalCard.innerHTML = getFileModalHTML({
-
         ...window.pendingFileData,
-
         title: "Confirm File Details",
-
         confirmMode: true
-
     });
-
 }
 // submit file create ends here
+
+  // edit file
+  function editFile() {
+    modalCard.innerHTML = getFileModalHTML({
+        ...window.pendingFileData,
+        title: "Edit File",
+        confirmMode: false
+    });
+}
+  // edit file ends
+
+// confirm submitFile
+  function confirmSubmitFile() {
+    const formData = createFormData({
+        action: "createFile",
+        ...window.pendingFileData
+    });
+    sendToGAS({
+        formData,
+        successTitle: "File Created Successfully"
+    });
+}
+// confirm submitFile ends
+  
 // // Function to handle submitted data of Create File
 // function submitFile() {
 //     // Create FormData
