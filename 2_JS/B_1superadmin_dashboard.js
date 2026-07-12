@@ -63,7 +63,6 @@ function getFileModalHTML(config = {}) {
     <h2>${title}</h2>
     <button class="close-modal" onclick="closeModal()">×</button>
 </div>
-
 <div class="form-group">
     <label>File Number</label>
     <input
@@ -72,7 +71,6 @@ function getFileModalHTML(config = {}) {
         value="${fileNumber}"
         ${confirmMode ? "disabled" : ""}>
 </div>
-
 <div class="form-group">
     <label>File Name</label>
     <input
@@ -81,44 +79,35 @@ function getFileModalHTML(config = {}) {
         value="${fileName}"
         ${confirmMode ? "disabled" : ""}>
 </div>
-
 <div class="form-group">
     <label>Section</label>
-
     <select id="fileSection" ${confirmMode ? "disabled" : ""}>
         <option ${fileSection==="Accounts"?"selected":""}>Accounts</option>
         <option ${fileSection==="Administration"?"selected":""}>Administration</option>
         <option ${fileSection==="Establishment"?"selected":""}>Establishment</option>
     </select>
 </div>
-
 <div class="form-group">
     <label>Description</label>
-
     <textarea
         id="fileDescription"
         rows="4"
         ${confirmMode ? "disabled" : ""}>${fileDescription}</textarea>
 </div>
-
-${
-confirmMode
-?
+${confirmMode?
 `
 <button class="submit-btn" onclick="confirmSubmitFile()">
 Confirm
 </button>
-
 <button class="submit-btn" onclick="editFile()">
-Edit
-</button>
-`
-:
-`
+Edit</button>
+`:`
 <button class="submit-btn" onclick="submitFile()">
 Create File
 </button>
+`}
 `;}
+  
 // fn to createFile Modal html
 // fn to createFile Modal html ends
 // // fn to createFile Modal html
