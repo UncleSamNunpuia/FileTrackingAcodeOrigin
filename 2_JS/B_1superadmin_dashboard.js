@@ -118,7 +118,7 @@ Edit
 <button class="submit-btn" onclick="submitFile()">
 Create File
 </button>
-`};
+`}
 // fn to createFile Modal html
 // fn to createFile Modal html ends
 // // fn to createFile Modal html
