@@ -45,7 +45,22 @@
   padding: 36px 36px 60px;
   flex: 1;
 }
+.page-title{
+    text-align: center;
+    margin-bottom: 2rem;
+}
 
+.page-title h2{
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: .25rem;
+}
+
+.page-title p{
+    color: #6c757d;
+    margin: 0;
+}
 /*==================================================
   SECTION HEADER
 ==================================================*/
@@ -68,6 +83,15 @@
   background: var(--border);
 }
 
+.dashboard-container{
+    width:100%;
+    max-width:80%;
+    margin:0 auto;
+    padding-inline:1rem;
+  /* background:var(--red); */
+  }
+
+
 /*==================================================
   APP TILES
 ==================================================*/
@@ -75,11 +99,13 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+  width: 100%;
   margin-bottom: 32px;
 }
 
 .app-tile {
   position: relative;
+  background: linear-gradient(140deg, #4F46E5 0%, #3730A3 100%);
   overflow: hidden;
   display: block;
   padding: 32px 28px 28px;
@@ -242,7 +268,12 @@
   .topbar {
     padding: 0 16px;
   }
+  .dashboard-container{
+      max-width:100%;
+      padding-inline:1rem;
+  }
 }
+
 /*==================================================
   MODAL
 ==================================================*/

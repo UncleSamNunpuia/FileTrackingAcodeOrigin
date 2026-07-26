@@ -57,7 +57,7 @@ const GAS_URL =
         messageDiv.innerHTML =
           "<span class='text-success'>Login Successful! Redirecting...</span>";
 
-// not role based, just login authenticated redirection
+        // not role based, just login authenticated redirection
         // setTimeout(() => {
         //   window.location.href = "../1_html/B_dashboard.html";
         // }, 1000);
@@ -76,6 +76,12 @@ const GAS_URL =
               break;
         
             case "normal":
+              console.log("normal user login detected");
+              console.log({
+                token: sessionStorage.getItem("auth_token"),
+                role: sessionStorage.getItem("role"),
+                username: sessionStorage.getItem("username")
+                });
               window.location.href =
                 "../1_html/B_3normal_dashboard.html";
               break;

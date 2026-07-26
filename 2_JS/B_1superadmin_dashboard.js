@@ -1,7 +1,9 @@
 // assigning variables
 const modalCard = document.getElementById("modalCard");
 const modalOverlay = document.getElementById("modalOverlay");
-const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
+// GAS_URL is already defined in the B_authenticatedPages.js file,
+// so the assignment here is commented out to avoid redeclaration errors.
+// const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
 // assigning the Modal HTML to variables ends
 
 // below are html codes to be rendered as modals
