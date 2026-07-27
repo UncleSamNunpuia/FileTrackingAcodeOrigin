@@ -59,7 +59,7 @@ const GAS_URL =
         messageDiv.innerHTML =
           "<span class='text-success'>Login Successful! Redirecting...</span>";
 
-// not role based, just login authenticated redirection
+        // not role based, just login authenticated redirection
         // setTimeout(() => {
         //   window.location.href = "../1_html/B_dashboard.html";
         // }, 1000);
@@ -98,4 +98,4 @@ const GAS_URL =
       messageDiv.innerHTML =
         "<span class='text-danger'>Something went wrong. Try again.</span>";
     }
-  });
+});
