@@ -4,20 +4,20 @@
 window.Icons = {
     userIcon: `
       <svg
-                width="26"
-                height="26"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="white"
-                stroke-width="1.8"
-              >
-                <path
-                  stroke-linecap="round"
-                  d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"
-                />
-                <circle cx="9" cy="7" r="4" />
-                <path stroke-linecap="round" d="M19 8v6M22 11h-6" />
-              </svg>`,
+          width="26"
+          height="26"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="white"
+          stroke-width="1.8"
+        >
+          <path
+            stroke-linecap="round"
+            d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"
+          />
+          <circle cx="9" cy="7" r="4" />
+          <path stroke-linecap="round" d="M19 8v6M22 11h-6" />
+        </svg>`,
     arrowIcon: `
     <svg
         width="14"
