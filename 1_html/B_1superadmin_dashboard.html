@@ -3,18 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bootstrap demo</title>
+    <title>B_superAdmin landing Page</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
+    <!-- import css -->
     <link rel="stylesheet" href="../3_CSS/SASS/B_1superadmin_dashboard.css" />
-    <!-- <script src="../2_JS/B_1superadmin_dashboard.js" defer></script> -->
-    <script src="../2_JS/B_1superadmin_dashboard.js"></script>
-    <script src="../2_JS/B_authenticatedPages.js"></script>
-    <!-- <script src="../2_JS/B_authenticatedPages.js" defer></script> -->
+    <!-- import js -->
+    <!-- svgIcons js must be laoded first before any script that uses icons -->
+    <script src="../2_JS/iconsSvg/svgIcons.js" defer></script>
+    <script src="../2_JS/B_1superadmin_dashboard.js" defer></script>
+    <!-- below js is for authentications login -->
+    <script src="../2_JS/B_authenticatedPages.js" defer></script>
   </head>
   <body>
     <!-- main nvabar -->
@@ -38,6 +41,7 @@
       <div class="page-body">
         <!-- APP LAUNCHERS -->
         <div class="section-hd">Quick Access</div>
+
         <div class="app-tiles">
           <!-- CREATE USER TILE -->
           <div
@@ -133,6 +137,7 @@
         <div class="modal-card" id="modalCard"></div>
       </div>
     </div>
+
     <!-- import bootstrap js -->
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

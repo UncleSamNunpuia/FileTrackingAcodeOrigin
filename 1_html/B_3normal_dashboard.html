@@ -3,39 +3,183 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bootstrap demo</title>
+    <title>B_normal user Landing Page</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
+    <!-- import css -->
+    <link rel="stylesheet" href="../3_CSS/SASS/B_1superadmin_dashboard.css" />
+    <!-- import js -->
+    <!-- svgIcons js must be laoded first before any script that uses icons -->
+    <script src="../2_JS/iconsSvg/svgIcons.js" defer></script>
+    <script src="../2_JS/B_3normal_dashboard.js" defer></script>
+    <!-- below js is for authentications login -->
     <script src="../2_JS/B_authenticatedPages.js" defer></script>
+  
   </head>
   <body>
     <!-- main nvabar -->
     <div>
       <header class="topbar">
-    <div class="topbar-left">
-        <h3 class="system-title">
-            File Tracking System
-        </h3>
+        <div class="topbar-left">
+          <h3 class="system-title">File Tracking System</h3>
+        </div>
+        <div class="topbar-right">
+          <span id="loggedInUser"></span>
+          <span id="loggedInRole" class="role-badge"></span>
+          <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+        <!--page heading  -->
+        <div>
+          <p>Normal user landing dashboard here</p>
+        </div>
+      </header>
     </div>
-    <div class="topbar-right">
-        <span id="loggedInUser"></span>
-        <span id="loggedInRole" class="role-badge"></span>
-        <button
-            id="logoutBtn"
-            class="logout-btn">
-            Logout
-        </button>
+
+    <!-- below is withouth grid custom -->
+    <!-- codes for role specific content -->
+    <div class="page-body">
+      <!-- welcome -->
+      <div class="page-title">
+        <h2>Normal User Dashboard</h2>
+        <p>Select an application below to continue.</p>
+      </div>
+      <!-- APP LAUNCHERS -->
+      <div class="section-hd">Quick Access</div>
+      <!-- bootstrap grid -->
+
+      <!-- NEW PUC -->
+      <div class="app-tiles">
+        <div
+          class="app-tile indigo"
+          id="tile-user"
+          tabindex="0"
+          onclick="openModal('createNewPUC')"
+        >
+          <!-- Icon svg -->
+          <div class="tile-icon-wrap" data-icon="fileIcon"></div>
+          <div class="tile-label">Enter PUC details</div>
+          <div class="tile-desc">
+            Add dak received from other offices, already assigned Fresh Receipt
+            number
+            <b> (FR no.) </b>
+            and enter the PUC details in the system.
+          </div>
+          <div class="tile-action">
+            Open App
+            <!-- arrow svg -->
+            <div class="icon" data-icon="arrowIcon"></div>
+          </div>
+        </div>
+        <!-- MY PUCs -->
+        <div
+          class="app-tile indigo" id="tile-user" tabindex="0"
+          onclick="openModal('myPUCs')">
+
+          <!-- Icon svg -->
+          <div class="tile-icon-wrap" data-icon="bulletListIcon"></div>
+          <div class="tile-label">Enter myPUC details</div>
+          <div class="tile-desc">
+            Click to open table of all PUCs entered by you, <br>
+            which are already assigned
+            Fresh Receipt number
+            <b> (FR no.) </b>
+          </div>
+          <div class="tile-action">
+            Open App
+            <!-- arrow svg -->
+            <div class="icon" data-icon="arrowIcon"></div>
+          </div>
+        </div>
+      </div>
+       
+        <!-- SEARCH -->
+        <!-- <div
+            class="app-tile orange disabled"
+            tabindex="0">
+
+            <div class="tile-icon-wrap">
+                <svg width="26" height="26"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="white"
+                    stroke-width="1.8">
+                    <circle cx="11" cy="11" r="7"/>
+
+                    <path stroke-linecap="round" d="M20 20l-4-4"/>
+                </svg>
+            </div>
+            <div class="tile-label">
+                Search PUC
+            </div>
+            <div class="tile-desc">
+                Search letters and correspondence using various
+                filters.
+            </div>
+            <div class="tile-action">
+                Coming Soon
+            </div>
+        </div> -->
+        <!-- TRACK FILE -->
+        <!-- <div
+            class="app-tile purple disabled"
+            tabindex="0">
+            <div class="tile-icon-wrap">
+                <svg width="26"
+                    height="26"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="white"
+                    stroke-width="1.8">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M5 12h14"/>
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 5l7 7-7 7"/>
+                </svg>
+            </div>
+
+            <div class="tile-label">
+                Track File
+            </div>
+            <div class="tile-desc">
+                Track movement and status of files within the office.
+            </div>
+            <div class="tile-action">
+                Coming Soon
+            </div>
+        </div> -->
+      </div>
     </div>
-<!--page heading  -->
-    <div>
-      <p>Normal user landing dashboard here</p>
+
+    <!-- this part is a bootstrap grid for generic use
+     t display blocks in a grid -->
+    <div class="container-fluid dashboard-container">
+      <div class="row g-4">
+        <div class="col-12 col-md-6">
+          <div class="app-tile blue h-100">app1</div>
+        </div>
+        <!-- APP 2 -->
+        <div class="col-12 col-md-6">
+          <div class="app-tile green h-100">app 2</div>
+        </div>
+        <!-- APP 3 -->
+        <div class="col-12 col-md-6">
+          <div class="app-tile orange h-100">app3</div>
+        </div>
+        <!-- APP 4 -->
+        <div class="col-12 col-md-6">
+          <div class="app-tile purple h-100">app4</div>
+        </div>
+      </div>
     </div>
-</header>
-    </div>
+
     <!-- import bootstrap js -->
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
@@ -47,5 +191,6 @@
       integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
       crossorigin="anonymous"
     ></script>
+    <!-- import bootstrap ends -->
   </body>
 </html>

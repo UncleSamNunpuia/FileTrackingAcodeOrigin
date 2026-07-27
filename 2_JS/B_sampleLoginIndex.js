@@ -6,9 +6,7 @@ console.log("JS Loaded");
 const GAS_URL =
   "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
 
-  document
-  .getElementById("loginForm")
-  .addEventListener("submit", async function (event) {
+  document.getElementById("loginForm").addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const username = document.getElementById("username").value.trim();
@@ -78,6 +76,12 @@ const GAS_URL =
               break;
         
             case "normal":
+              console.log("normal user login detected");
+              console.log({
+                token: sessionStorage.getItem("auth_token"),
+                role: sessionStorage.getItem("role"),
+                username: sessionStorage.getItem("username")
+                });
               window.location.href =
                 "../1_html/B_3normal_dashboard.html";
               break;
