@@ -18,6 +18,7 @@ window.Icons = {
           <circle cx="9" cy="7" r="4" />
           <path stroke-linecap="round" d="M19 8v6M22 11h-6" />
         </svg>`,
+  
     arrowIcon: `
     <svg
         width="14"
