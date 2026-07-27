@@ -111,7 +111,5 @@ window.loadIcons = function () {
         if (window.Icons[iconName]) {
             element.innerHTML = window.Icons[iconName];
         }
-
     });
-
 };
