@@ -14,10 +14,10 @@
     <link rel="stylesheet" href="../3_CSS/SASS/B_1superadmin_dashboard.css" />
     <!-- import js -->
     <!-- svgIcons js must be laoded first before any script that uses icons -->
-    <script src="../2_JS/iconsSvg/svgIcons.js" defer></script>
-    <script src="../2_JS/B_1superadmin_dashboard.js" defer></script>
+    <script type="module" src="../2_JS/iconsSvg/svgIcons.js" defer></script>
+    <script type="module" src="../2_JS/B_1superadmin_dashboard.js" defer></script>
     <!-- below js is for authentications login -->
-    <script src="../2_JS/B_authenticatedPages.js" defer></script>
+     <script type="module" src="../2_JS/B_authenticatedPages.js" defer></script>
   </head>
   <body>
     <!-- main nvabar -->
@@ -48,6 +48,7 @@
             class="app-tile indigo"
             id="tile-user"
             tabindex="0"
+            data-modal="createUser"
             onclick="openModal('createUser')"
           >
             <div class="tile-icon-wrap">

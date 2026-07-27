@@ -1,8 +1,16 @@
 // ver 3 - logout button implemented
 // GAS_URL was defined in user based js but this authenticaed page
 //  is more common js hence declaration done here: 26th July, 2026
-const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
-const token = sessionStorage.getItem("auth_token");
+// const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
+// const token = sessionStorage.getItem("auth_token");
+
+import {
+  GAS_URL,
+  getToken
+  // TOKEN_EXPIRY_MINUTES
+} from "./B_config.js";
+
+const token = getToken();
 // auth-check.js — include on every protected page (no changes needed here)
 (async function () {
   // const token = sessionStorage.getItem("auth_token");

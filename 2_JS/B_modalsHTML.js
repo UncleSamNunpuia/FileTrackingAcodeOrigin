@@ -1,81 +1,162 @@
-const userModalHTML = `
-<div class="modal-header">
-    <h2>Create New User</h2>
-    <button class="close-modal" onclick="closeModal()">×</button>
-</div>
-<div class="form-group">
-    <label for="username">Username</label>
-    <input type="text" id="username">
-</div>
-<div class="form-group">
-    <label for="password">Password</label>
-    <input type="password" id="password">
-</div>
-<div class="form-group">
-    <label for="role">Role</label>
-    <select id="role">
-        <option>User</option>
-        <option>Admin</option>
-        <option>Super User</option>
-    </select>
-</div>
-<div class="form-group">
-    <label for="section">Section</label>
-    <select id="section">
-        <option>Accounts</option>
-        <option>Administration</option>
-        <option>Establishment</option>
-        // this part maybe modified to fetch from database
-    </select>
-</div>
-<button class="submit-btn" onclick="submitUser()">
-    Create User
-</button>
-`;
-const fileModalHTML = `
-<div class="modal-header">
-    <h2>Enter File Number & Name</h2>
-    <button class="close-modal" onclick="closeModal()">×</button>
-</div>
-<div class="form-group">
-    <label for="fileNumber">File Number</label>
-    <input type="text" id="fileNumber">
-</div>
-<div class="form-group">
-    <label for="fileName">File Name</label>
-    <input type="text" id="fileName">
-</div>
-<div class="form-group">
-    <label for="fileSectionLabel">Section</label>
-    <select id="fileSection">
-        <option>Accounts</option>
-        <option>Administration</option>
-        <option>Establishment</option>
-        // This part maybe modified to fetch from database
-    </select>
-</div>
-<div class="form-group">
-    <label for="fileDescription">Description</label>
-    <textarea id="fileDescription" rows="4"></textarea>
-</div>
-<button class="submit-btn" onclick="submitFile()">
-Create File
-</button>
-`;
+// const userModalHTML = `
+// <div class="modal-header">
+//     <h2>Create New User</h2>
+//     <button class="close-modal" onclick="closeModal()">×</button>
+// </div>
+// <div class="form-group">
+//     <label for="username">Username</label>
+//     <input type="text" id="username">
+// </div>
+// <div class="form-group">
+//     <label for="password">Password</label>
+//     <input type="password" id="password">
+// </div>
+// <div class="form-group">
+//     <label for="role">Role</label>
+//     <select id="role">
+//         <option>User</option>
+//         <option>Admin</option>
+//         <option>Super User</option>
+//     </select>
+// </div>
+// <div class="form-group">
+//     <label for="section">Section</label>
+//     <select id="section">
+//         <option>Accounts</option>
+//         <option>Administration</option>
+//         <option>Establishment</option>
+//         // this part maybe modified to fetch from database
+//     </select>
+// </div>
+// <button class="submit-btn" onclick="submitUser()">
+//     Create User
+// </button>
+// `;
+// const fileModalHTML = `
+// <div class="modal-header">
+//     <h2>Enter File Number & Name</h2>
+//     <button class="close-modal" onclick="closeModal()">×</button>
+// </div>
+// <div class="form-group">
+//     <label for="fileNumber">File Number</label>
+//     <input type="text" id="fileNumber">
+// </div>
+// <div class="form-group">
+//     <label for="fileName">File Name</label>
+//     <input type="text" id="fileName">
+// </div>
+// <div class="form-group">
+//     <label for="fileSectionLabel">Section</label>
+//     <select id="fileSection">
+//         <option>Accounts</option>
+//         <option>Administration</option>
+//         <option>Establishment</option>
+//         // This part maybe modified to fetch from database
+//     </select>
+// </div>
+// <div class="form-group">
+//     <label for="fileDescription">Description</label>
+//     <textarea id="fileDescription" rows="4"></textarea>
+// </div>
+// <button class="submit-btn" onclick="submitFile()">
+// Create File
+// </button>
+// `;
 
 const modalCard = document.getElementById("modalCard");
 const modalOverlay = document.getElementById("modalOverlay");
 const userTile  = document.getElementById("tile-user");
 const fileTile  = document.getElementById("tile-file");
 
+// below are html codes to be rendered as modals
+// fn to createUser Modal html
+function getUserModalHTML() {
+        return `
+        <div class="modal-header">
+            <h2>Create New User</h2>
+            <button class="close-modal" onclick="closeModal()">×</button>
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password">
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role">
+                <option>User</option>
+                <option>Admin</option>
+                <option>Super User</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="section">Section</label>
+            <select id="section">
+                <option>Accounts</option>
+                <option>Administration</option>
+                <option>Establishment</option>
+            </select>
+        </div>
+
+        <button class="submit-btn" id="btnCreateUser"> 
+            Create User
+        </button>
+        `;
+    }
+// fn to createUser Modal html ends
+
+// fn to createFile Modal html
+function getFileModalHTML() {
+    return `
+        <div class="modal-header">
+            <h2>Enter File Number & Name</h2>
+            <button class="close-modal" onclick="closeModal()">×</button>
+        </div>
+        <div class="form-group">
+            <label for="fileNumber">File Number</label>
+            <input type="text" id="fileNumber">
+        </div>
+        <div class="form-group">
+            <label for="fileName">File Name</label>
+            <input type="text" id="fileName">
+        </div>
+        <div class="form-group">
+            <label for="fileSectionLabel">Section</label>
+            <select id="fileSection">
+                <option>Accounts</option>
+                <option>Administration</option>
+                <option>Establishment</option>
+                // This part maybe modified to fetch from database
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="fileDescription">Description</label>
+            <textarea id="fileDescription" rows="4"></textarea>
+        </div>
+        <button class="submit-btn" onclick="submitFile()">
+            Create File
+        </button>
+        `;
+    }
+// fn to createFile Modal html ends
+
 // this funtion handles input from frontendt buttons
 function openModal(type, title = "", message = "") {
     switch (type) {
         case "createUser":
-            modalCard.innerHTML = userModalHTML;
+            modalCard.innerHTML = getUserModalHTML();
+            // modalCard.innerHTML = userModalHTML;
             break;
         case "createFile":
-            modalCard.innerHTML = fileModalHTML;
+            modalCard.innerHTML = getFileModalHTML();
+            // modalCard.innerHTML = fileModalHTML;    
             break;
         case "success":
             modalCard.innerHTML = showSuccessModalHTML(title, message);
@@ -134,7 +215,6 @@ export {
     openModal,
     showSuccessModalHTML,
     closeModal,
-    closeSuccessModal,
-    showSuccessModalHTML
+    closeSuccessModal
 };
 // export the code

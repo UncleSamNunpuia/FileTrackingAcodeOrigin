@@ -1,3 +1,20 @@
+// import functions from B_modalsHTML.js
+import {
+    openModal,
+    closeModal,
+    closeSuccessModal
+} from "./B_modalsHTML.js";
+
+import {
+    GAS_URL
+} from "./B_config.js";
+
+    import { submitUser } from "./userActions.js";
+
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.closeSuccessModal = closeSuccessModal;
+
 // assigning variables
 const modalCard = document.getElementById("modalCard");
 const modalOverlay = document.getElementById("modalOverlay");
@@ -6,86 +23,87 @@ const modalOverlay = document.getElementById("modalOverlay");
 // const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
 // assigning the Modal HTML to variables ends
 
-// below are html codes to be rendered as modals
-// fn to createUser Modal html
-function getUserModalHTML() {
-        return `
-        <div class="modal-header">
-            <h2>Create New User</h2>
-            <button class="close-modal" onclick="closeModal()">×</button>
-        </div>
+// // below are html codes to be rendered as modals
+// // fn to createUser Modal html
+// function getUserModalHTML() {
+//         return `
+//         <div class="modal-header">
+//             <h2>Create New User</h2>
+//             <button class="close-modal" onclick="closeModal()">×</button>
+//         </div>
 
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username">
-        </div>
+//         <div class="form-group">
+//             <label for="username">Username</label>
+//             <input type="text" id="username">
+//         </div>
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password">
-        </div>
+//         <div class="form-group">
+//             <label for="password">Password</label>
+//             <input type="password" id="password">
+//         </div>
 
-        <div class="form-group">
-            <label for="role">Role</label>
-            <select id="role">
-                <option>User</option>
-                <option>Admin</option>
-                <option>Super User</option>
-            </select>
-        </div>
+//         <div class="form-group">
+//             <label for="role">Role</label>
+//             <select id="role">
+//                 <option>User</option>
+//                 <option>Admin</option>
+//                 <option>Super User</option>
+//             </select>
+//         </div>
 
-        <div class="form-group">
-            <label for="section">Section</label>
-            <select id="section">
-                <option>Accounts</option>
-                <option>Administration</option>
-                <option>Establishment</option>
-            </select>
-        </div>
+//         <div class="form-group">
+//             <label for="section">Section</label>
+//             <select id="section">
+//                 <option>Accounts</option>
+//                 <option>Administration</option>
+//                 <option>Establishment</option>
+//             </select>
+//         </div>
 
-        <button class="submit-btn" onclick="submitUser()">
-            Create User
-        </button>
-        `;
-    }
-// fn to createUser Modal html ends
+//         <button class="submit-btn" onclick="submitUser()">
+//             Create User
+//         </button>
+//         `;
+//     }
+// // fn to createUser Modal html ends
 
-// fn to createFile Modal html
-function getFileModalHTML() {
-    return `
-        <div class="modal-header">
-            <h2>Enter File Number & Name</h2>
-            <button class="close-modal" onclick="closeModal()">×</button>
-        </div>
-        <div class="form-group">
-            <label for="fileNumber">File Number</label>
-            <input type="text" id="fileNumber">
-        </div>
-        <div class="form-group">
-            <label for="fileName">File Name</label>
-            <input type="text" id="fileName">
-        </div>
-        <div class="form-group">
-            <label for="fileSectionLabel">Section</label>
-            <select id="fileSection">
-                <option>Accounts</option>
-                <option>Administration</option>
-                <option>Establishment</option>
-                // This part maybe modified to fetch from database
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="fileDescription">Description</label>
-            <textarea id="fileDescription" rows="4"></textarea>
-        </div>
-        <button class="submit-btn" onclick="submitFile()">
-            Create File
-        </button>
-        `;
-    }
-// fn to createFile Modal html ends
+// // fn to createFile Modal html
+// function getFileModalHTML() {
+//     return `
+//         <div class="modal-header">
+//             <h2>Enter File Number & Name</h2>
+//             <button class="close-modal" onclick="closeModal()">×</button>
+//         </div>
+//         <div class="form-group">
+//             <label for="fileNumber">File Number</label>
+//             <input type="text" id="fileNumber">
+//         </div>
+//         <div class="form-group">
+//             <label for="fileName">File Name</label>
+//             <input type="text" id="fileName">
+//         </div>
+//         <div class="form-group">
+//             <label for="fileSectionLabel">Section</label>
+//             <select id="fileSection">
+//                 <option>Accounts</option>
+//                 <option>Administration</option>
+//                 <option>Establishment</option>
+//                 // This part maybe modified to fetch from database
+//             </select>
+//         </div>
+//         <div class="form-group">
+//             <label for="fileDescription">Description</label>
+//             <textarea id="fileDescription" rows="4"></textarea>
+//         </div>
+//         <button class="submit-btn" onclick="submitFile()">
+//             Create File
+//         </button>
+//         `;
+//     }
+// // fn to createFile Modal html ends
 
 // show success modal
+
 function showSuccessModalHTML(title, message) {
 // modalCard.innerHTML = `
     return `
@@ -115,26 +133,27 @@ function showSuccessModalHTML(title, message) {
 `;
     modalOverlay.style.display = "none";
 }
+
 // below are html codes to be rendered as modals ends
  
 // openModal function to handle both user and file modals i.e to route Modal function call
-function openModal(type, title = "", message = "") {
-    switch (type) {
-        case "createUser":
-            modalCard.innerHTML = getUserModalHTML();
-            break;
-        case "createFile":
-            modalCard.innerHTML = getFileModalHTML();
-            break;
-        case "success":
-            modalCard.innerHTML = showSuccessModalHTML(title, message);
-            break;
-        default:
-            console.error("Unknown modal type:", type);
-            return;
-    }
-    modalOverlay.style.display = "flex";
-}
+// function openModal(type, title = "", message = "") {
+//     switch (type) {
+//         case "createUser":
+//             modalCard.innerHTML = getUserModalHTML();
+//             break;
+//         case "createFile":
+//             modalCard.innerHTML = getFileModalHTML();
+//             break;
+//         case "success":
+//             modalCard.innerHTML = showSuccessModalHTML(title, message);
+//             break;
+//         default:
+//             console.error("Unknown modal type:", type);
+//             return;
+//     }
+//     modalOverlay.style.display = "flex";
+// }
 // openModal function to handle both user and file modals ends
 
 // // close modal function X button
@@ -149,22 +168,27 @@ function openModal(type, title = "", message = "") {
 // }
 
 //  funtion to handle submitted data of create user
-function submitUser() {
-    // Create FormData
-    submitForm({
-            action:"createUser",
-            fields:[
-                "username",
-                "password",
-                "role",
-                "section"
-            ],
-            successTitle: "User Created Successfully"
-        });
-};
+
+// function submitUser() {
+//     // Create FormData
+//     submitForm({
+//             action:"createUser",
+//             fields:[
+//                 "username",
+//                 "password",
+//                 "role",
+//                 "section"
+//             ],
+//             successTitle: "User Created Successfully"
+//         });
+// };
 // submit create user ends here
 
 // Function to handle submitted data of Create File
+
+// handle createUser button
+document.getElementById("btnCreateUser").addEventListener("click", submitUser);
+
 function submitFile() {
     // Create FormData
     submitForm({
