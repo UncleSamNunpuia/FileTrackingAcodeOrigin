@@ -14,11 +14,9 @@
     <!-- import js -->
     <!-- svgIcons js must be laoded first before any script that uses icons -->
     <script src="../2_JS/iconsSvg/svgIcons.js" defer></script>
-    <!-- <script type="module" src="../2_JS/iconsSvg/svgIcons.js" defer></script> -->
-    <script src="../2_JS/B_1superadmin_dashboard.js" defer></script>
-    <!-- <script type="module" src="../2_JS/B_1superadmin_dashboard.js" defer></script> -->
+    <script type="module" src="../2_JS/B_1superadmin_dashboard.js" defer></script>
     <!-- below js is for authentications login -->
-     <script type="module" src="../2_JS/B_authenticatedPages.js" defer></script>
+    <script type="module" src="../2_JS/B_authenticatedPages.js" defer></script>
   </head>
   <body>
     <!-- main nvabar -->
@@ -62,16 +60,7 @@
             </div>
             <div class="tile-action">
               Open App
-              <svg
-                width="14"
-                height="14"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2.5"
-              >
-                <path stroke-linecap="round" d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
+                <div class="icon" data-icon="arrowIcon"></div>
             </div>
           </div>
 
@@ -82,21 +71,8 @@
             tabindex="0"
             onclick="openModal('createFile')"
           >
-            <div class="tile-icon-wrap">
-              <svg
-                width="26"
-                height="26"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="white"
-                stroke-width="1.8"
-              >
-                <path
-                  stroke-linecap="round"
-                  d="M3 7a2 2 0 012-2h5l2 2h7a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"
-                />
-                <path stroke-linecap="round" d="M12 11v6M9 14h6" />
-              </svg>
+            <div class="tile-icon-wrap" data-icon="fileIcon">
+              File Icon here
             </div>
             <div class="tile-label">Enter File Number & Name</div>
             <div class="tile-desc">
@@ -105,16 +81,7 @@
             </div>
             <div class="tile-action">
               Open App
-              <svg
-                width="14"
-                height="14"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2.5"
-              >
-                <path stroke-linecap="round" d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
+            <div class="icon" data-icon="arrowIcon"></div>
             </div>
           </div>
         </div>

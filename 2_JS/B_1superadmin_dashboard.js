@@ -9,114 +9,20 @@ import {
     GAS_URL
 } from "./B_config.js";
 
-    import { submitUser } from "./userActions.js";
-
 window.openModal = openModal;
 window.closeModal = closeModal;
 window.closeSuccessModal = closeSuccessModal;
 
-// to laod icons from svgIcons.js file
-// if script is loaded with defer  you can simply do:
-loadIcons();
+// to laod icons from svgIcons.js file if script is loaded with defer  you can simply do:
+// loadIcons();
 // else if script is loaded without defer, you can do:
-// document.addEventListener("DOMContentLoaded", () => {
-//     loadIcons();
-// });
-// eliminate the need to remember calling loadIcons() 
-// on every page by having icons.js do it automatically:
+// document.addEventListener("DOMContentLoaded", () => { loadIcons(); // });
+// eliminate the need to remember calling loadIcons()  on every page by having icons.js do it automatically:
 window.addEventListener("DOMContentLoaded", () => {
     window.loadIcons();
 });
 
-// assigning variables
-const modalCard = document.getElementById("modalCard");
-const modalOverlay = document.getElementById("modalOverlay");
-// GAS_URL is already defined in the B_authenticatedPages.js file,
-// so the assignment here is commented out to avoid redeclaration errors.
-// const GAS_URL = "https://script.google.com/macros/s/AKfycbybot_jsane8OaXdYBSyoROy14s2NrTw6rj_Cmv3JszHjKbe7kp7vxVeilMe5xc17eLig/exec";
-// assigning the Modal HTML to variables ends
-
-// // below are html codes to be rendered as modals
-// // fn to createUser Modal html
-// function getUserModalHTML() {
-//         return `
-//         <div class="modal-header">
-//             <h2>Create New User</h2>
-//             <button class="close-modal" onclick="closeModal()">×</button>
-//         </div>
-
-//         <div class="form-group">
-//             <label for="username">Username</label>
-//             <input type="text" id="username">
-//         </div>
-
-//         <div class="form-group">
-//             <label for="password">Password</label>
-//             <input type="password" id="password">
-//         </div>
-
-//         <div class="form-group">
-//             <label for="role">Role</label>
-//             <select id="role">
-//                 <option>User</option>
-//                 <option>Admin</option>
-//                 <option>Super User</option>
-//             </select>
-//         </div>
-
-//         <div class="form-group">
-//             <label for="section">Section</label>
-//             <select id="section">
-//                 <option>Accounts</option>
-//                 <option>Administration</option>
-//                 <option>Establishment</option>
-//             </select>
-//         </div>
-
-//         <button class="submit-btn" onclick="submitUser()">
-//             Create User
-//         </button>
-//         `;
-//     }
-// // fn to createUser Modal html ends
-
-// // fn to createFile Modal html
-// function getFileModalHTML() {
-//     return `
-//         <div class="modal-header">
-//             <h2>Enter File Number & Name</h2>
-//             <button class="close-modal" onclick="closeModal()">×</button>
-//         </div>
-//         <div class="form-group">
-//             <label for="fileNumber">File Number</label>
-//             <input type="text" id="fileNumber">
-//         </div>
-//         <div class="form-group">
-//             <label for="fileName">File Name</label>
-//             <input type="text" id="fileName">
-//         </div>
-//         <div class="form-group">
-//             <label for="fileSectionLabel">Section</label>
-//             <select id="fileSection">
-//                 <option>Accounts</option>
-//                 <option>Administration</option>
-//                 <option>Establishment</option>
-//                 // This part maybe modified to fetch from database
-//             </select>
-//         </div>
-//         <div class="form-group">
-//             <label for="fileDescription">Description</label>
-//             <textarea id="fileDescription" rows="4"></textarea>
-//         </div>
-//         <button class="submit-btn" onclick="submitFile()">
-//             Create File
-//         </button>
-//         `;
-//     }
-// // fn to createFile Modal html ends
-
 // show success modal
-
 function showSuccessModalHTML(title, message) {
 // modalCard.innerHTML = `
     return `
@@ -200,7 +106,9 @@ function showSuccessModalHTML(title, message) {
 // Function to handle submitted data of Create File
 
 // handle createUser button
-document.getElementById("btnCreateUser").addEventListener("click", submitUser);
+// const createUserbutton = document.getElementById("btnCreateUser");
+// createUserbutton.onclick = submitUser;
+// .addEventListener("click", submitUser);
 
 function submitFile() {
     // Create FormData
@@ -226,8 +134,6 @@ function submitForm(config) {
     config.fields.forEach(id => { data[id] = document.getElementById(id).value.trim();});
     const formData = createFormData(data);
 
-    
-
     console.log(formData)
     sendToGAS({ formData, successTitle:config.successTitle});
 
@@ -243,7 +149,6 @@ function createFormData(data) {
 } // create Form data ends
 
 // send to GAS fn
-// function sendToGAS(formData, title) {
 function sendToGAS(config) {
     // object destructuring (or destructuring assignment) in JS (intro in ES6).
     // Extracts properties from an object into variables with the same names.
@@ -271,3 +176,5 @@ function sendToGAS(config) {
         alert("Failed to connect to the server.");
     });
 } // send to GAS fn ends here
+
+export { submitForm };
