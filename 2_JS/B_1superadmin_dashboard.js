@@ -1,17 +1,15 @@
 // import functions from B_modalsHTML.js
 import {
     openModal,
-    closeModal,
-    closeSuccessModal
+    closeModal
+    // closeSuccessModal
 } from "./B_modalsHTML.js";
 
 import {
     GAS_URL
 } from "./B_config.js";
 
-window.openModal = openModal;
-window.closeModal = closeModal;
-window.closeSuccessModal = closeSuccessModal;
+import { sendToGAS } from "./gas.js";
 
 // to laod icons from svgIcons.js file if script is loaded with defer  you can simply do:
 // loadIcons();
@@ -22,110 +20,16 @@ window.addEventListener("DOMContentLoaded", () => {
     window.loadIcons();
 });
 
-// show success modal
-function showSuccessModalHTML(title, message) {
-// modalCard.innerHTML = `
-    return `
-        <div class="modal-header">
-            <h2>Success</h2>
-            <button class="close-modal" onclick="closeModal()">×</button>
-        </div>
-        <div style="text-align:center; padding:30px 20px;">
-            <div style="
-                width:80px;
-                height:80px;
-                margin:0 auto 20px;
-                border-radius:50%;
-                background:#28a745;
-                color:white;
-                font-size:50px;
-                line-height:80px;
-                font-weight:bold;">
-                ✓
-            </div>
-            <h3>${title}</h3>
-            <p>${message}</p>
-            <button class="submit-btn" onclick="closeSuccessModal()">
-                OK
-            </button>
-        </div>
-`;
-    modalOverlay.style.display = "none";
-}
+// listens the click on .app-title and attach eventlistener to open the 
+// modal based on the data-modal attribute of the clicked tile.
+document.querySelectorAll(".app-tile").forEach(tile => {
+    tile.addEventListener("click", () => {
+        openModal(tile.dataset.modal);
 
-// below are html codes to be rendered as modals ends
- 
-// openModal function to handle both user and file modals i.e to route Modal function call
-// function openModal(type, title = "", message = "") {
-//     switch (type) {
-//         case "createUser":
-//             modalCard.innerHTML = getUserModalHTML();
-//             break;
-//         case "createFile":
-//             modalCard.innerHTML = getFileModalHTML();
-//             break;
-//         case "success":
-//             modalCard.innerHTML = showSuccessModalHTML(title, message);
-//             break;
-//         default:
-//             console.error("Unknown modal type:", type);
-//             return;
-//     }
-//     modalOverlay.style.display = "flex";
-// }
-// openModal function to handle both user and file modals ends
-
-// // close modal function X button
-// function closeModal() {
-//     console.trace("closeModal called");
-//     modalOverlay.style.display = "none";
-// }
-
-// // ok on success modal button
-// function closeSuccessModal() {
-//     modalOverlay.style.display = "none";
-// }
-
-//  funtion to handle submitted data of create user
-
-// function submitUser() {
-//     // Create FormData
-//     submitForm({
-//             action:"createUser",
-//             fields:[
-//                 "username",
-//                 "password",
-//                 "role",
-//                 "section"
-//             ],
-//             successTitle: "User Created Successfully"
-//         });
-// };
-// submit create user ends here
-
-// Function to handle submitted data of Create File
-
-// handle createUser button
-// const createUserbutton = document.getElementById("btnCreateUser");
-// createUserbutton.onclick = submitUser;
-// .addEventListener("click", submitUser);
-
-function submitFile() {
-    // Create FormData
-    submitForm({
-        action: "createFile",
-        // here <html id> : <what GAS expects> mapping is done, 
-        // so that the GAS can understand the data sent from the front end.
-        fields:[
-            "fileNumber",
-            "fileName",
-            "fileSection",
-            "fileDescription"
-        ],
-        successTitle: "File Created Successfully"
     });
-}
-// submit file create ends here
+});
+
+
 
 function submitForm(config) {
     // only action parameter of the config (submitForm() is assigned to data object,
@@ -148,33 +52,31 @@ function createFormData(data) {
     return formData;
 } // create Form data ends
 
-// send to GAS fn
-function sendToGAS(config) {
-    // object destructuring (or destructuring assignment) in JS (intro in ES6).
-    // Extracts properties from an object into variables with the same names.
-    // if the parameter passed is increased the variable names can be increased in the destructuring assignment.
-    const {
-        formData,
-        successTitle
-    } = config;
+// // send to GAS fn
+// function sendToGAS(config) {
+// // object destructuring (or destructuring assignment) in JS (intro in ES6).
+// // Extracts properties from an object into variables with the same names.
+// // if the parameter passed is increased the variable names 
+// // can be increased in the destructuring assignment.
+//     const {
+//         formData,
+//         successTitle
+//     } = config;
 
-    fetch(GAS_URL, {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Response:", data);
-        if (data.success) {
-            alert(data.message);
-            openModal("success", successTitle, data.message);
-        } else {
-            alert("Error: " + data.message);
-        }
-    }).catch(error => {
-        console.error("Error:", error);
-        alert("Failed to connect to the server.");
-    });
-} // send to GAS fn ends here
+//     fetch(GAS_URL, { method: "POST", body: formData })
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log("Response:", data);
+//         if (data.success) {
+//             alert(data.message);
+//             openModal("success", successTitle, data.message);
+//         } else {
+//             alert("Error: " + data.message);
+//         }
+//     }).catch(error => {
+//         console.error("Error:", error);
+//         alert("Failed to connect to the server.");
+//     });
+// } // send to GAS fn ends here
 
 export { submitForm };

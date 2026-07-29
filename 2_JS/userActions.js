@@ -16,5 +16,21 @@ function submitUser() {
 };
 // submit create user ends here
 
+function submitFile() {
+    // Create FormData
+    submitForm({
+        action: "createFile",
+        // here <html id> : <what GAS expects> mapping is done, 
+        // so that the GAS can understand the data sent from the front end.
+        fields:[
+            "fileNumber",
+            "fileName",
+            "fileSection",
+            "fileDescription"
+        ],
+        successTitle: "File Created Successfully"
+    });
+}
 
-export { submitUser };
+
+export { submitUser, submitFile };
