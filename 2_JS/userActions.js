@@ -1,8 +1,6 @@
 import { submitForm } from "./B_1superadmin_dashboard.js";
 
 function submitUser() {
-    // alert("submitUser function called");
-    // Create FormData
     submitForm({
             action:"createUser",
             fields:[

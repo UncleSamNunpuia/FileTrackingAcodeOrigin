@@ -11,8 +11,8 @@ import {
 
 import { sendToGAS } from "./gas.js";
 
-// to laod icons from svgIcons.js file if script is loaded with defer  you can simply do:
-// loadIcons();
+// to laod icons from svgIcons.js file 
+// if script is loaded with defer  you can simply do: loadIcons();
 // else if script is loaded without defer, you can do:
 // document.addEventListener("DOMContentLoaded", () => { loadIcons(); // });
 // eliminate the need to remember calling loadIcons()  on every page by having icons.js do it automatically:
@@ -25,10 +25,8 @@ window.addEventListener("DOMContentLoaded", () => {
 document.querySelectorAll(".app-tile").forEach(tile => {
     tile.addEventListener("click", () => {
         openModal(tile.dataset.modal);
-
     });
 });
-
 
 
 function submitForm(config) {
@@ -51,32 +49,5 @@ function createFormData(data) {
     });
     return formData;
 } // create Form data ends
-
-// // send to GAS fn
-// function sendToGAS(config) {
-// // object destructuring (or destructuring assignment) in JS (intro in ES6).
-// // Extracts properties from an object into variables with the same names.
-// // if the parameter passed is increased the variable names 
-// // can be increased in the destructuring assignment.
-//     const {
-//         formData,
-//         successTitle
-//     } = config;
-
-//     fetch(GAS_URL, { method: "POST", body: formData })
-//     .then(response => response.json())
-//     .then(data => {
-//         console.log("Response:", data);
-//         if (data.success) {
-//             alert(data.message);
-//             openModal("success", successTitle, data.message);
-//         } else {
-//             alert("Error: " + data.message);
-//         }
-//     }).catch(error => {
-//         console.error("Error:", error);
-//         alert("Failed to connect to the server.");
-//     });
-// } // send to GAS fn ends here
 
 export { submitForm };

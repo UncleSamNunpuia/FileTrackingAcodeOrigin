@@ -126,11 +126,6 @@ function closeModal() {
     modalOverlay.style.display = "none";
 }
 
-// // // ok on success modal button
-// function closeSuccessModal() {
-//     modalOverlay.style.display = "none";
-// }
-
 // show success modal
 function showSuccessModalHTML(title, message) {
     // modalCard.innerHTML = `
@@ -163,11 +158,9 @@ function showSuccessModalHTML(title, message) {
 }
 // below are html codes to be rendered as modals ends
 
-    // <button class="submit-btn" onclick="closeSuccessModal()">
 // export the functions to be used in other modules
 export {
     openModal,
     closeModal,
     showSuccessModalHTML
-    // closeSuccessModal
 };
